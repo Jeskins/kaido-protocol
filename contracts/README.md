@@ -17,7 +17,7 @@ ETH / USDC 0.05% pool Arbitrum
 - ### Setup
 
 ```shell
-forge init clamm
+forge init uniswap
 forge build
 forge fmt
 ```
