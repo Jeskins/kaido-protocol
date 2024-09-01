@@ -152,7 +152,6 @@ contract UniswapV3 {
         int24 tick
     ) private returns (Position.Info storage position) {
         position = positions.get(owner, tickLower, tickUpper);
-
         uint256 _feeGrowthGlobal0X128 = feeGrowthGlobal0X128;
         uint256 _feeGrowthGlobal1X128 = feeGrowthGlobal1X128;
 
@@ -262,10 +261,12 @@ contract UniswapV3 {
 
         if (amount0 > 0) {
             position.tokensOwed0 -= amount0;
+            console.log(IERC20(token0).balanceOf(address(this)));
             IERC20(token0).transfer(recipient, amount0);
         }
         if (amount1 > 0) {
             position.tokensOwed1 -= amount1;
+            console.log(IERC20(token1).balanceOf(address(this)));
             IERC20(token1).transfer(recipient, amount1);
         }
     }
@@ -530,4 +531,5 @@ contract UniswapV3 {
     {
         return positions.get(owner, tickLower, tickUpper);
     }
+
 }

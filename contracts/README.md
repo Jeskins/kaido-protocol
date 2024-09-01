@@ -76,7 +76,7 @@ forge fmt
 - getAmount0Delta, getAmount1Delta
 - liquidity delta
 - tick, liquidity, price directions and token 0 token 1
-- getNextSqrtPriceFromAmount0RoundingUp(
+- getNextSqrtPriceFromAmount0RoundingUp
 - getNextSqrtPriceFromAmount1RoundingDown
 - why `fee = amountIN * fee / (1 - fee)`
 - nextInitializedTickWithinOneWord

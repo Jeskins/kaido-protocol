@@ -73,54 +73,53 @@ contract UniswapV3Test is Test {
 
             (uint256 amount0, uint256 amount1) =
                 uniswapV3.mint(users[0], tickLower, tickUpper, liquidity);
-
-            console.log("add liquidity - amount 0:", floor(amount0, 1e18));
-            console.log("add liquidity - amount 1:", floor(amount1, 1e6));
+            console.log("add liquidity - amount 0:", amount0);
+            console.log("add liquidity - amount 1:", amount1);
         }
 
         // Swap (1 for 0, exact input) //
         {
-            int256 amountIn = 1000 * 1e6;
-
+            int256 amountIn = 1 * 1e17;
+            bool zeroForOne = true; // true - ETH IN USD OUT || false - ETH OUT USD IN
             vm.prank(users[1]);
             (int256 amount0Delta, int256 amount1Delta) =
-                uniswapV3.swap(users[1], false, amountIn, sqrtRatioUpperX96);
+                uniswapV3.swap(users[1], zeroForOne, amountIn, zeroForOne ? sqrtRatioLowerX96 : sqrtRatioUpperX96);
 
             // Print amount 0 and 1 delta, split into whole num and decimal parts
             // + amount in
             // - amount out
             if (amount0Delta < 0) {
                 uint256 d = uint256(-amount0Delta);
+                console.log(d);
                 console.log(
-                    "swap - amount 0 out:", floor(d, 1e18), rem(d, 1e18, 1e15)
+                    "swap - amount 0 out:", d
                 );
             } else {
                 uint256 d = uint256(amount0Delta);
                 console.log(
-                    "swap - amount 0 in:", floor(d, 1e18), rem(d, 1e18, 1e15)
+                    "swap - amount 0 in:", d
                 );
             }
             if (amount1Delta < 0) {
                 uint256 d = uint256(-amount1Delta);
                 console.log(
-                    "swap - amount 1 out:", floor(d, 1e6), rem(d, 1e6, 1e3)
+                    "swap - amount 1 out:", d
                 );
             } else {
                 uint256 d = uint256(amount1Delta);
+                console.log(d);
                 console.log(
-                    "swap - amount 1 in:", floor(d, 1e6), rem(d, 1e6, 1e3)
+                    "swap - amount 1 in:", d
                 );
             }
         }
+     
 
         // Burn + collect //
         {
-            vm.prank(users[0]);
-            uniswapV3.burn(tickLower, tickUpper, 0);
-
             Position.Info memory pos =
                 uniswapV3.getPosition(users[0], tickLower, tickUpper);
-
+          
             vm.prank(users[0]);
             (uint256 a0Burned, uint256 a1Burned) =
                 uniswapV3.burn(tickLower, tickUpper, pos.liquidity);
