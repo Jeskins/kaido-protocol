@@ -30,7 +30,8 @@ contract UniswapV3Test is Test {
             token1 = new ERC20("USD", "USD", 6);
         }
 
-        uniswapV3 = new UniswapV3(address(token0), address(token1), FEE, TICK_SPACING);
+        uniswapV3 =
+            new UniswapV3(address(token0), address(token1), FEE, TICK_SPACING);
 
         uniswapV3.initialize(SQRT_P0);
 
