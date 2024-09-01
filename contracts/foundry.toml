@@ -12,5 +12,3 @@ line_length = 80
 [rpc_endpoints]
 kinto = "${KINTO_RPC_URL}"
 
-[etherscan]
-kintoscan = { key = "ROUTESCAN" }
