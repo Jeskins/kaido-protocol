@@ -1,0 +1,11 @@
+{
+  "31337": {
+    "tokens": {
+      "usdc": "0x8ff3311062f33D1F3A4f4b15A7cF131d5e0Afb02",
+      "dai": "0xD378b8Dc9c56206087b58A308934799a389DEa50",
+      "usdt": "0xB7E40FA93AF383DDF62e732986dB9e04771A7A47",
+      "link": "0x97CB7Ec616A49Ce324510d89B1e2A78131711ddD",
+      "weth": "0xc5B15f3973931473dBdaDCc831C850DdA4b77657"
+    }
+  }
+}
