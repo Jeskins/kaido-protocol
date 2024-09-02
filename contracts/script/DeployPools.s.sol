@@ -74,26 +74,26 @@ contract DeployPools is Script {
             link=tokens.arb.link;
             usdc=tokens.arb.usdc;
         }
-
-    //   address wethUsdc=factory.createPool(weth, usdc, FEE, wethUsdcx96);
+        console.log(address(factory));
+      address wethUsdc=factory.createPool(address(2), address(1), FEE, wethUsdcx96);
     //     address wethUsdt=factory.createPool(weth, usdt, FEE, wethUsdtx96);
     //     address wethLink=factory.createPool(weth, link, FEE, wethLinkx96);
     //    address usdcUsdt=factory.createPool(usdc, usdt, FEE, usdcUsdtx96);
     //    address usdcLink=factory.createPool(usdc, link, FEE, usdcLinkx96);
     //   address usdtLink=factory.createPool(usdt, link, FEE, usdtLinkx96);
 
-        string memory poolsLabel="pools";
-        string memory poolsPath="./deployments/pools.json";
-        vm.serializeJson(poolsLabel, vm.readFile(poolsPath));
-        vm.serializeAddress(chain, "wethUsdc", factory.createPool(weth, usdc, FEE, wethUsdcx96));
-        vm.serializeAddress(chain, "wethUsdt", factory.createPool(weth, usdt, FEE, wethUsdtx96));
-        vm.serializeAddress(chain, "wethLink", factory.createPool(weth, link, FEE, wethLinkx96));
-        vm.serializeAddress(chain, "usdcUsdt", factory.createPool(usdc, usdt, FEE, usdcUsdtx96));
-        vm.serializeAddress(chain, "usdcLink", factory.createPool(usdc, link, FEE, usdcLinkx96));
-        string memory outputPools=vm.serializeAddress(chain, "usdtLink", factory.createPool(usdt, link, FEE, usdtLinkx96));
+        // string memory poolsLabel="pools";
+        // string memory poolsPath="./deployments/pools.json";
+        // vm.serializeJson(poolsLabel, vm.readFile(poolsPath));
+        // vm.serializeAddress(chain, "wethUsdc", factory.createPool(weth, usdc, FEE, wethUsdcx96));
+        // vm.serializeAddress(chain, "wethUsdt", factory.createPool(weth, usdt, FEE, wethUsdtx96));
+        // vm.serializeAddress(chain, "wethLink", factory.createPool(weth, link, FEE, wethLinkx96));
+        // vm.serializeAddress(chain, "usdcUsdt", factory.createPool(usdc, usdt, FEE, usdcUsdtx96));
+        // vm.serializeAddress(chain, "usdcLink", factory.createPool(usdc, link, FEE, usdcLinkx96));
+        // string memory outputPools=vm.serializeAddress(chain, "usdtLink", factory.createPool(usdt, link, FEE, usdtLinkx96));
 
-        string memory outputJson=vm.serializeString(poolsLabel, chain, outputPools);
-        vm.writeJson(outputJson, poolsPath);
+        // string memory outputJson=vm.serializeString(poolsLabel, chain, outputPools);
+        // vm.writeJson(outputJson, poolsPath);
 
 
       
