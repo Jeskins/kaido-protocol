@@ -7,5 +7,23 @@
       "link": "0x97CB7Ec616A49Ce324510d89B1e2A78131711ddD",
       "weth": "0xc5B15f3973931473dBdaDCc831C850DdA4b77657"
     }
+  },
+  "7887": {
+    "tokens": {
+      "usdc": "0x06e2dde9E1fb7F37b5E5a765DB7f7F8ee084599d",
+      "dai": "0xbe684f82a790a5899B40Bc0A1A00A70923d8018a",
+      "usdt": "0xA1F63668D823E65e641DDD91cAB184dc3038eBE3",
+      "link": "0x56a119a31387b1F2d97a363060b73F9A4Ce73E38",
+      "weth": "0x301788D0CCA42C46c2742CDa8daDD079a2752C68"
+    }
+  },
+  "421614": {
+    "tokens": {
+      "usdc": "0xABE0b98c49Be741E04b7083Af96DDb0C8e8B42fF",
+      "dai": "0x56DbB13FEC86E776e442230AA235A52bB6E29d4D",
+      "usdt": "0xb1D941C592752298421d12B07593E66e17850C65",
+      "link": "0xb596abBfd6456dbd930F0B95dbae6D531cF5053c",
+      "weth": "0x1F695f403012ad9068741534B3c5006358524ED0"
+    }
   }
 }
