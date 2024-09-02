@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "../../ui/button";
-import { supportedchains, supportedcoins, poolAbi } from "@/lib/constants";
+import { supportedchains, supportedcoins } from "@/lib/constants";
 import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
@@ -18,7 +18,8 @@ import Link from "next/link";
 import { useAccount, useWriteContract } from "wagmi";
 import { erc20Abi, parseEther, zeroAddress } from "viem";
 import { waitForTransactionReceipt } from "@wagmi/core";
-import { config, educhainTestnet } from "@/lib/config";
+import { config } from "@/lib/config";
+import { arbitrumSepolia } from "viem/chains";
 export default function Transaction({
   open,
   setOpen,
@@ -52,19 +53,19 @@ export default function Transaction({
     console.log(toAmount);
     let tempPool;
     if (
-      supportedchains[chainId || educhainTestnet.id].pools[
+      supportedchains[chainId || arbitrumSepolia.id].pools[
         ((fromToken as string) + toToken) as string
       ] == undefined
     ) {
       setFromIsTokenA(true);
       tempPool =
-        supportedchains[chainId || educhainTestnet.id].pools[
+        supportedchains[chainId || arbitrumSepolia.id].pools[
           ((toToken as string) + fromToken) as string
         ];
     } else {
       setFromIsTokenA(false);
       tempPool =
-        supportedchains[chainId || educhainTestnet.id].pools[
+        supportedchains[chainId || arbitrumSepolia.id].pools[
           ((fromToken as string) + toToken) as string
         ];
     }
@@ -174,13 +175,13 @@ export default function Transaction({
               setTxStarted(1);
               console.log("Approving");
               console.log(
-                supportedchains[chainId || educhainTestnet.id].tokens[fromToken]
+                supportedchains[chainId || arbitrumSepolia.id].tokens[fromToken]
               );
               try {
                 const tx = await writeContractAsync({
                   abi: erc20Abi,
                   address:
-                    supportedchains[chainId || educhainTestnet.id].tokens[
+                    supportedchains[chainId || arbitrumSepolia.id].tokens[
                       fromToken
                     ],
                   functionName: "approve",
@@ -234,13 +235,13 @@ export default function Transaction({
               ];
               console.log(args);
               try {
-                const tx = await writeContractAsync({
-                  abi: poolAbi,
-                  address: pool,
-                  functionName: "swap",
-                  args,
-                });
-                setActionTx(tx);
+                // const tx = await writeContractAsync({
+                //   abi: poolAbi,
+                //   address: pool,
+                //   functionName: "swap",
+                //   args,
+                // });
+                // setActionTx(tx);
 
                 setCompletedTxs(completedTxs + 1);
               } catch (e) {
