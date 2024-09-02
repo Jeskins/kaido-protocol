@@ -60,7 +60,7 @@ export default function DefaultLanding() {
   //       className="mb-5"
   //     />
   //     <p className="pb-6 font-semibold text-sm">
-  //       Beginner friendly UniswapV3 on Educhain powered by AI
+  //       Beginner friendly UniswapV3 on  powered by AI
   //     </p>
 
   //     {/* <Image
