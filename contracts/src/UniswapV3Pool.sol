@@ -67,7 +67,6 @@ contract UniswapV3Pool {
         int24 _tickSpacing
     ) {
         require(_token0 != address(0), "token 0 = zero address");
-        require(_token0 < _token1, "token 0 >= token 1");
 
         token0 = _token0;
         token1 = _token1;

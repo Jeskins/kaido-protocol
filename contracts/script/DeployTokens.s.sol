@@ -13,17 +13,25 @@ contract DeployTokens is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("KINTO_DEV_KEY");
         vm.startBroadcast(deployerPrivateKey);
-        DAIMock dai = new DAIMock();
-        vm.writeJson(vm.toString(address(dai)), './deployments.json', string(abi.encodePacked(".",vm.toString(block.chainid),".tokens.dai")));
-        LINKMock link = new LINKMock();
-        vm.writeJson(vm.toString(address(link)), './deployments.json', string(abi.encodePacked(".",vm.toString(block.chainid),".tokens.link")));
-        USDCMock usdc = new USDCMock();
-        vm.writeJson(vm.toString(address(usdc)), './deployments.json', string(abi.encodePacked(".",vm.toString(block.chainid),".tokens.usdc")));
-        USDTMock usdt = new USDTMock();
-        vm.writeJson(vm.toString(address(usdt)), './deployments.json', string(abi.encodePacked(".",vm.toString(block.chainid),".tokens.usdt")));
-        WETHMock weth = new WETHMock();
-        vm.writeJson(vm.toString(address(weth)), './deployments.json', string(abi.encodePacked(".",vm.toString(block.chainid),".tokens.weth")));
 
+        DAIMock dai = new DAIMock();
+        LINKMock link = new LINKMock();
+        USDCMock usdc = new USDCMock();
+        USDTMock usdt = new USDTMock();
+        WETHMock weth = new WETHMock();
+        
+        vm.serializeJson("json", vm.readFile("./deployments/tokens.json"));
+
+        string memory chain=vm.toString(block.chainid);
+        vm.serializeAddress(chain, "dai", address(dai));
+        vm.serializeAddress(chain, "link", address(link));
+        vm.serializeAddress(chain, "usdc", address(usdc));
+        vm.serializeAddress(chain, "usdt", address(usdt));
+        string memory outputTokens =vm.serializeAddress(chain, "weth", address(weth));
+
+        string memory outputJson=vm.serializeString("json", chain, outputTokens);
+
+        vm.writeJson(outputJson, "./deployments/tokens.json");
         vm.stopBroadcast();
     }
 }

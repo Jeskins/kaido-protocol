@@ -30,13 +30,13 @@ contract UniswapV3PoolFactory {
     }
 
     function createPool(
-        address tokenA,
-        address tokenB,
+        address token0,
+        address token1,
         uint24 fee,
         uint160 sqrtPriceX96
     ) external returns (address pool) {
-        require(tokenA != tokenB);
-        (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
+        require(token0 != token1);
+        require(getPool[token0][token1][fee]==address(0));
 
         require(token0 != address(0));
         int24 tickSpacing = feeAmountTickSpacing[fee];
