@@ -10,11 +10,12 @@ task("create-pools", "Create a pool").setAction(async (taskArgs) => {
   const [signer] = await ethers.getSigners();
 
   // CHANGE THIS
+
   const poolFactory = networks[network.name].poolFactory;
-  const usdt = networks[network.name].usdt;
-  const usdc = networks[network.name].usdc;
-  const link = networks[network.name].link;
-  const weth = networks[network.name].weth;
+  const usdt = networks[network.name].tokens.usdt;
+  const usdc = networks[network.name].tokens.usdc;
+  const link = networks[network.name].tokens.link;
+  const weth = networks[network.name].tokens.weth;
 
   const fee = 3000;
 
@@ -27,7 +28,11 @@ task("create-pools", "Create a pool").setAction(async (taskArgs) => {
   const usdtLinkx96 = "23900130918473815190755344384";
 
   const core = new ethers.Contract(poolFactory, abi, signer);
-  const response = await core.createPool(tokenA, tokenB, fee, sqrtPriceX96);
-  const receipt = await response.wait();
+  console.log(usdc, link, fee, usdcLinkx96);
+  let response;
+  let receipt;
+
+  response = await core.createPool(usdt, link, fee, usdtLinkx96);
+  receipt = await response.wait();
   console.log(receipt.transactionHash);
 });
