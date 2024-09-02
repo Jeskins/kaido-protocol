@@ -28,15 +28,15 @@ export default function DefaultLanding() {
           alt="Logo"
           className="rounded-full mx-auto my-4"
         />
-        <p className="text-5xl">A Beginner-Friendly DeFi Platform</p>
+        <p className="text-5xl">A Beginner-Friendly DeFi Solution</p>
         <p className="text-xl mt-2">
-          Forked from{" "}
-          <Highlight className="text-black dark:text-white from-pink-300 to-purple-700 dark:from-pink-500 dark:to-pink-600">
-            &nbsp;UniswapV3&nbsp;
-          </Highlight>
-          &nbsp;| Built on{" "}
+          Built on{" "}
           <Highlight className="text-black dark:text-white ">
             &nbsp;KINTO&nbsp;
+          </Highlight>
+          &nbsp;| Forked from{" "}
+          <Highlight className="text-black dark:text-white from-pink-300 to-purple-700 dark:from-pink-500 dark:to-pink-600">
+            &nbsp;UniswapV3&nbsp;
           </Highlight>
           &nbsp;| Powered by{" "}
           <Highlight className="text-black dark:text-white from-blue-300 to-blue-700 dark:from-blue-600 dark:to-blue-700">
