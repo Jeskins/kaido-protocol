@@ -15,7 +15,6 @@ import { supportedchains } from "@/lib/constants";
 import { ArrowLeftCircleIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { educhainTestnet } from "@/lib/config";
 
 export default function ConnectButton() {
   const { address, status, chainId } = useAccount();
@@ -31,7 +30,7 @@ export default function ConnectButton() {
         onClick={() => {
           setChainChevron(!chainChevron);
         }}
-        className="border-none text-sm py-auto bg-secondary mx-2 my-auto"
+        className="border-none text-sm py-auto bg-secondary mx-2 my-auto rounded-md"
       >
         <MenubarMenu>
           <MenubarTrigger
@@ -41,8 +40,7 @@ export default function ConnectButton() {
             }}
           >
             <div className="flex space-x-2 items-center w-full justify-between">
-              {chainId != arbitrumSepolia.id &&
-              chainId != educhainTestnet.id ? (
+              {chainId != arbitrumSepolia.id ? (
                 <div className="flex space-x-2">
                   <p>❌</p>
                   <p>Wrong Network</p>
@@ -108,7 +106,7 @@ export default function ConnectButton() {
       </Menubar>
 
       <Button
-        className="my-auto flex space-x-2"
+        className="my-auto flex space-x-2 rounded-sm"
         onClick={() => {
           disconnect();
         }}
@@ -129,7 +127,7 @@ export default function ConnectButton() {
       onClick={() => {
         console.log("connect");
         connect({
-          chainId: educhainTestnet.id,
+          chainId: arbitrumSepolia.id,
           connector: injected(),
         });
       }}
