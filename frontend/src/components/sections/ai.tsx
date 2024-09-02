@@ -45,7 +45,7 @@ export default function AIComponent({
             } items-center space-x-2 my-1`}
           >
             {convo.isAI && (
-              <Avatar className="h-9 w-9">
+              <Avatar className="h-5 w-9">
                 <AvatarImage src={"/logo.png"} alt="Avatar" />
                 <AvatarFallback>OM</AvatarFallback>
               </Avatar>

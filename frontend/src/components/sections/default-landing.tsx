@@ -22,13 +22,13 @@ export default function DefaultLanding() {
         className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto "
       >
         <Image
-          src={"/coins/arbitrum.png"}
+          src={"/logotext.png"}
           height={100}
-          width={150}
+          width={450}
           alt="Logo"
-          className="rounded-full mx-auto my-4"
+          className="rounded-full mx-auto mb-8"
         />
-        <p className="text-5xl">A Beginner-Friendly DeFi Solution</p>
+        <p className="text-5xl">DeFi, for the new degens </p>
         <p className="text-xl mt-2">
           Built on{" "}
           <Highlight className="text-black dark:text-white ">
