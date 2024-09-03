@@ -11,6 +11,7 @@ import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/lib/config";
 import { BalanceProvider } from "@/components/sections/context";
+import Head from "next/head";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,7 +28,6 @@ export default function RootLayout({
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <html lang="en" suppressHydrationWarning>
-          <head />
           <body
             className={cn(
               "h-screen bg-background font-sans antialiased",
