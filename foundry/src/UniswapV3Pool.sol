@@ -30,7 +30,7 @@ function checkTicks(int24 tickLower, int24 tickUpper) pure {
     require(tickUpper <= TickMath.MAX_TICK);
 }
 
-contract UniswapV3 {
+contract UniswapV3Pool {
     using SafeCast for uint256;
     using SafeCast for int256;
     using Tick for mapping(int24 => Tick.Info);
@@ -67,7 +67,6 @@ contract UniswapV3 {
         int24 _tickSpacing
     ) {
         require(_token0 != address(0), "token 0 = zero address");
-        require(_token0 < _token1, "token 0 >= token 1");
 
         token0 = _token0;
         token1 = _token1;

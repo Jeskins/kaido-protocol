@@ -1,11 +1,10 @@
-"use client";
+import HomePage from "@/components/sections/home/page";
+
+export const metadata = {
+  title: "Home | Kaido Protocol",
+  description: "Home page",
+};
 
 export default function Page() {
-  return (
-    <div className="flex-1">
-      <div className="flex flex-col items-center py-6">
-        <div className="flex"></div>
-      </div>
-    </div>
-  );
+  return <HomePage />;
 }

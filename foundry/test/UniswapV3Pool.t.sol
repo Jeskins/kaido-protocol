@@ -6,12 +6,12 @@ import "forge-std/console.sol";
 import "./ERC20.sol";
 import "./lib/LiquidityAmounts.sol";
 import "../src/lib/TickMath.sol";
-import "../src/UniswapV3.sol";
+import "../src/UniswapV3Pool.sol";
 
-contract UniswapV3Test is Test {
+contract UniswapV3PoolTest is Test {
     ERC20 private token0;
     ERC20 private token1;
-    UniswapV3 private uniswapV3;
+    UniswapV3Pool private uniswapV3;
 
     // 0.05%
     uint24 private constant FEE = 500;
@@ -31,7 +31,7 @@ contract UniswapV3Test is Test {
         }
 
         uniswapV3 =
-            new UniswapV3(address(token0), address(token1), FEE, TICK_SPACING);
+            new UniswapV3Pool(address(token0), address(token1), FEE, TICK_SPACING);
 
         uniswapV3.initialize(SQRT_P0);
 
