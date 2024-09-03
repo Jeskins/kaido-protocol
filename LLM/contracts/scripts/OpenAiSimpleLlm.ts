@@ -1,14 +1,11 @@
-import {ethers} from "hardhat";
-
+import { ethers } from "hardhat";
 
 async function main() {
-  if (!process.env.ORACLE_ADDRESS) {
-    throw new Error("ORACLE_ADDRESS env variable is not set.");
-  }
-  const oracleAddress: string = process.env.ORACLE_ADDRESS;
+  // Hard-coded Oracle Address
+  const oracleAddress: string = "0x68EC9556830AD097D661Df2557FBCeC166a0A075"; // Replace with your actual Oracle address
+
   await deployImprovedOpenAiSimpleLLM(oracleAddress);
 }
-
 
 async function deployImprovedOpenAiSimpleLLM(oracleAddress: string) {
   const agent = await ethers.deployContract("ImprovedOpenAiSimpleLLM", [oracleAddress], {});
