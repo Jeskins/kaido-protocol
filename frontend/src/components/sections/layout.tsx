@@ -77,7 +77,7 @@ export default function Layout({ children }: LayoutProps) {
       {address == "" ? (
         <DefaultLanding />
       ) : (
-        <div className="h-screen flex">
+        <div className="h-screen flex z-10">
           <BackgroundBeams />
           <div className="z-10 px-8 w-full flex flex-col justify-center items-center">
             <div className="flex w-full justify-between">

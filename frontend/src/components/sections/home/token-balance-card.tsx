@@ -19,7 +19,7 @@ export default function TokenBalanceCard({
   balance: Record<string, string>;
   usdbalance: Record<string, string>;
 }) {
-  const { setOpenFacuet } = useEnvironmentContext();
+  const { setOpenFaucet } = useEnvironmentContext();
   return (
     <Card className="col-span-2">
       <CardHeader className="">
@@ -32,7 +32,7 @@ export default function TokenBalanceCard({
             className="px-5 rounded-sm"
             variant={"outline"}
             onClick={() => {
-              setOpenFacuet(true);
+              setOpenFaucet(true);
             }}
           >
             <Fuel className="w-5 h-5 mr-2" /> Faucet

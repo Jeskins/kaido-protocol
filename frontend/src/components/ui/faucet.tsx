@@ -18,7 +18,7 @@ import { ToastAction } from "./toast";
 import Link from "next/link";
 
 export function Faucet() {
-  const { openFaucet, setOpenFacuet, kintoSDK, address, publicClient } =
+  const { openFaucet, setOpenFaucet, kintoSDK, address, publicClient } =
     useEnvironmentContext();
   const { toast } = useToast();
 
@@ -46,7 +46,7 @@ export function Faucet() {
     <Dialog
       open={openFaucet}
       onOpenChange={(op) => {
-        setOpenFacuet(op);
+        setOpenFaucet(op);
       }}
     >
       <DialogContent className="sm:max-w-[425px]">

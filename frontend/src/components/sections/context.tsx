@@ -32,7 +32,7 @@ interface BalanceContextType {
     openPositionTransactionModal: boolean
   ) => void;
   openFaucet: boolean;
-  setOpenFacuet: (openFaucet: boolean) => void;
+  setOpenFaucet: (openFaucet: boolean) => void;
   publicClient: any;
   setPublicClient: (publicClient: any) => void;
   convos: Convo[];
@@ -63,7 +63,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     suggestions: [],
   });
   const [convos, setConvos] = useState<Convo[]>([]);
-  const [openFaucet, setOpenFacuet] = useState<boolean>(true);
+  const [openFaucet, setOpenFaucet] = useState<boolean>(false);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [openAi, setOpenAi] = useState<boolean>(false);
   const [actionParams, setActionParams] = useState<string>("");
@@ -96,7 +96,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchAccountInfo(kintoSDK, setAddress);
-  });
+  }, []);
 
   useEffect(() => {
     if (address != "") {
@@ -105,6 +105,26 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
       );
     }
   }, [address]);
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          const modal = document.getElementById("kinto-sdk-modal");
+          if (modal) {
+            modal.style.zIndex = "69420";
+          }
+        }
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <BalanceContext.Provider
       value={{
@@ -132,7 +152,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         convos,
         setConvos,
         openFaucet,
-        setOpenFacuet,
+        setOpenFaucet,
       }}
     >
       {children}
