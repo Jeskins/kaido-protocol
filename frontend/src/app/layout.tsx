@@ -7,17 +7,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Layout from "@/components/sections/layout";
-import { WagmiProvider } from "wagmi";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { config } from "@/lib/config";
 import { BalanceProvider } from "@/components/sections/context";
-import Head from "next/head";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -25,31 +20,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <html lang="en" suppressHydrationWarning>
-          <body
-            className={cn(
-              "h-screen bg-background font-sans antialiased",
-              fontSans.variable
-            )}
-          >
-            <ThemeProvider
-              attribute="class"
-              disableTransitionOnChange
-              defaultTheme="dark"
-            >
-              <BalanceProvider>
-                <Layout>
-                  <Toaster />
-                  <ThemeSwitcher />
-                  {children}
-                </Layout>
-              </BalanceProvider>
-            </ThemeProvider>
-          </body>
-        </html>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          "h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          disableTransitionOnChange
+          defaultTheme="dark"
+        >
+          <BalanceProvider>
+            <Layout>
+              <Toaster />
+              <ThemeSwitcher />
+              {children}
+            </Layout>
+          </BalanceProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

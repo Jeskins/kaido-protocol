@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-
+import { createKintoSDK } from "kinto-web-sdk";
+import { KintoSDK } from "@/lib/type";
 interface BalanceContextType {
   totalBalance: number | null;
   setTotalBalance: (totalBalance: number) => void;
@@ -17,6 +18,11 @@ interface BalanceContextType {
   setOpenPositionTransactionModal: (
     openPositionTransactionModal: boolean
   ) => void;
+  kintoSDK: KintoSDK;
+  address: string;
+  setAddress: (address: string) => void;
+  appName: string;
+  setAppName: (appName: string) => void;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -38,6 +44,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const [action, setAction] = useState<string>("");
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
+  const appAddress = process.env.NEXT_PUBLIC_KINTO_APP_ADDRESS || "";
+  const kintoSDK = createKintoSDK(appAddress);
+  const [address, setAddress] = useState("");
+  const [appName, setAppName] = useState("");
   return (
     <BalanceContext.Provider
       value={{
@@ -55,6 +65,11 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setAction,
         openPositionTransactionModal,
         setOpenPositionTransactionModal,
+        kintoSDK,
+        address,
+        setAddress,
+        appName,
+        setAppName,
       }}
     >
       {children}
