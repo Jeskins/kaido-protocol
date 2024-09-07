@@ -9,7 +9,7 @@ import { createKintoSDK } from "kinto-web-sdk";
 import { balance, KintoSDK } from "@/lib/type";
 import { createPublicClient, formatEther, http } from "viem";
 import { kinto } from "@/lib/config";
-import getAllbalance from "@/lib/helpers/getAllbalance";
+import getAllbalance from "@/lib/helpers/getAllBalances";
 interface BalanceContextType {
   kintoSDK: KintoSDK;
   address: string;
