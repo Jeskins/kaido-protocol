@@ -16,7 +16,7 @@ Rest of this README assumes you are in the `examples` directory
 
 ## Running
 
-**Chat GPT example**
+**LLM**
 ```
 npm run chat
 ```
