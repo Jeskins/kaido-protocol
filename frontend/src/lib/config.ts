@@ -45,7 +45,7 @@ export const config = defaultWagmiConfig({
   ssr: true,
   auth: {
     email: false, // default to true
-    socials: ["farcaster"],
+    socials: ["google", "farcaster"],
     showWallets: true, // default to true
     walletFeatures: true, // default to true
   },
