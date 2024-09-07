@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Menubar,
@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import { arbitrumSepolia } from "viem/chains";
 export default function From({
@@ -30,7 +29,6 @@ export default function From({
   setFromToken: (fromToken: string) => void;
   isTestnet: boolean;
 }) {
-  const { chainId } = useAccount();
   const [chevron, setChevron] = useState(true);
   return (
     <Card className="w-full pt-2  border-none ">
@@ -61,64 +59,35 @@ export default function From({
                   alt=""
                   className="rounded-full"
                 />
-                <p>{`${isTestnet ? "t" : ""}${
-                  supportedcoins[fromToken].symbol
-                }`}</p>
+                <p>{supportedcoins[fromToken].symbol}</p>
                 {!chevron ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
             </MenubarTrigger>
             <MenubarContent>
-              {/* <MenubarItem
-                disabled={toToken == "eth" || toToken == "edu"}
-                onClick={() => {
-                  setFromToken(chainId == arbitrumSepolia.id ? "eth" : "edu");
-                  setChevron(true);
-                }}
-              >
-                <div className="flex space-x-2">
-                  <Image
-                    src={
-                      supportedcoins[
-                        chainId == arbitrumSepolia.id ? "eth" : "edu"
-                      ].image
-                    }
-                    width={20}
-                    height={20}
-                    alt=""
-                    className="rounded-full"
-                  />
-                  <p>
-                    {
-                      supportedcoins[
-                        chainId == arbitrumSepolia.id ? "eth" : "edu"
-                      ].symbol
-                    }
-                  </p>
-                </div>
-              </MenubarItem> */}
-
-              {Object.entries(supportedcoins)
-                .slice(2, 7)
-                .map(([coinId, coin]) => (
-                  <MenubarItem
-                    disabled={coinId == toToken}
-                    onClick={() => {
-                      setFromToken(coinId);
-                      setChevron(true);
-                    }}
-                  >
-                    <div className="flex space-x-2">
-                      <Image
-                        src={coin.image}
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rounded-full"
-                      />
-                      <p>{(isTestnet ? "t" : "") + coin.symbol}</p>
-                    </div>
-                  </MenubarItem>
-                ))}
+              {Object.entries(supportedcoins).map(([coinId, coin]) => (
+                <MenubarItem
+                  disabled={
+                    coinId == toToken ||
+                    (coinId == "eth" && toToken == "weth") ||
+                    (coinId == "weth" && toToken == "eth")
+                  }
+                  onClick={() => {
+                    setFromToken(coinId);
+                    setChevron(true);
+                  }}
+                >
+                  <div className="flex space-x-2">
+                    <Image
+                      src={coin.image}
+                      width={20}
+                      height={20}
+                      alt=""
+                      className="rounded-full"
+                    />
+                    <p>{(isTestnet ? "t" : "") + coin.symbol}</p>
+                  </div>
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>

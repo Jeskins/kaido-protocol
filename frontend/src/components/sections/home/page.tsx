@@ -1,25 +1,22 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import TokenBalanceCard from "@/components/sections/home/token-balance-card";
 import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
 import "@/styles/spinner.css";
-import { arbitrumSepolia } from "viem/chains";
 
 export default function HomePage() {
-  const { status, address } = useAccount();
-  const { totalBalance, balanceObject, balanceObjectInUSD } =
-    useEnvironmentContext();
+  const { address } = useEnvironmentContext();
+  const { totalBalance, balance, balanceInUSD } = useEnvironmentContext();
 
   if (totalBalance == null)
     return (
       <div className="flex-1 flex flex-col justify-center items-center">
         <div className="flex space-x-4 items-center">
-          <div className="black-spinner"></div>
+          <div className="spinner"></div>
           <p className="font-semibold text-md">
-            {balanceObject != null ? "Finishing up" : "Fetching Balances"}
+            {balance != null ? "Finishing up" : "Fetching balance"}
           </p>
         </div>
       </div>
@@ -50,38 +47,7 @@ export default function HomePage() {
         </div>
       </div>
       <div className="w-[80%] mx-auto">
-        <TokenBalanceCard
-          balances={{
-            eth: roundUpToFiveDecimals(
-              balanceObject[arbitrumSepolia.id].native
-            ),
-            usdc: roundUpToFiveDecimals(balanceObject[arbitrumSepolia.id].usdc),
-            usdt: roundUpToFiveDecimals(balanceObject[arbitrumSepolia.id].usdt),
-            link: roundUpToFiveDecimals(balanceObject[arbitrumSepolia.id].link),
-            dai: roundUpToFiveDecimals(balanceObject[arbitrumSepolia.id].dai),
-            weth: roundUpToFiveDecimals(balanceObject[arbitrumSepolia.id].weth),
-          }}
-          usdBalances={{
-            eth: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].native
-            ),
-            usdc: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].usdc
-            ),
-            usdt: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].usdt
-            ),
-            link: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].link
-            ),
-            dai: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].dai
-            ),
-            weth: roundUpToFiveDecimals(
-              balanceObjectInUSD[arbitrumSepolia.id].weth
-            ),
-          }}
-        />
+        <TokenBalanceCard balance={balance} usdbalance={balanceInUSD} />
       </div>
     </div>
   );

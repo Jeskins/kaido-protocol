@@ -6,9 +6,10 @@ import { parseEther } from "viem";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
 export function roundUpToFiveDecimals(floatStr: string): string {
   const num = parseFloat(floatStr);
-
+  console.log(num);
   if (isNaN(num)) {
     return "0.00";
   }
@@ -16,10 +17,19 @@ export function roundUpToFiveDecimals(floatStr: string): string {
   const roundedNum = Math.ceil(num * 100000) / 100000;
 
   let result = roundedNum.toFixed(5);
-
-  if (result.endsWith("000") || result.endsWith("00")) {
+  console.log(result);
+  if (result.endsWith("00000")) {
+    result = parseFloat(result).toFixed(1);
+  } else if (result.endsWith("000")) {
     result = parseFloat(result).toFixed(2);
+  } else if (result.endsWith("00")) {
+    result = parseFloat(result).toFixed(3);
+  } else if (result.endsWith("0")) {
+    result = parseFloat(result).toFixed(4);
+  } else {
+    result = parseFloat(result).toFixed(5);
   }
+  console.log(result);
 
   return result;
 }

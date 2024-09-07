@@ -79,7 +79,7 @@ contract ImprovedOpenAiSimpleLLM {
                                           "    link: 3235246546536,\n"
                                           "    weth: 234234234,\n"
                                           "};\n"
-                                          "I have mapped the chain Id with their respective balances, There is ONLY 1 Chain: where 7887 is Kinto. Once you get this input JUST SAY ""Hey Degen, I have analyzed your portfolio. Hit me up with any questions and I can guide you!\n"
+                                          "I have mapped the chain Id with their respective balance, There is ONLY 1 Chain: where 7887 is Kinto. Once you get this input JUST SAY ""Hey Degen, I have analyzed your portfolio. Hit me up with any questions and I can guide you!\n"
                                           "Before performing any action, ask the user for confirmation!!!"
                                           "21.) The numbers next to the token name represents the current balance. For instance, native: 231413413 represents the usdc balance\n"
                                           "22.) THERE ARE 4 possible tokens to swap in Kinto are usdc, usdt, link, weth. If anyone tries to swap a different token, say YOU DONT SWAP THAT TOKEN!!!\n"

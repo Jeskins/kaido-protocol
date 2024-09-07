@@ -5,7 +5,7 @@ import DefaultLanding from "@/components/sections/default-landing";
 import PositionsCard from "@/components/sections/position/positions-card";
 import RecentActionsCard from "@/components/sections/position/recent-actions-card";
 import BoxCard from "@/components/ui/box-card";
-import ConnectButton from "@/components/ui/connect-button";
+import ConnectButton from "@/components/ui/custom/connect-button";
 import Spinner from "@/components/ui/loading";
 import { Action, Position } from "@/lib/type";
 import { getTotalClaimed, getTotalDeposited } from "@/lib/utils";
@@ -16,18 +16,16 @@ import {
   Notebook,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAccount, useSwitchChain } from "wagmi";
 
 export default function Page() {
-  const { address, status, chainId } = useAccount();
-  const { switchChain } = useSwitchChain();
+  const { address } = useEnvironmentContext();
   const [positions, setPositions] = useState<Position[] | null>([]);
   const [actions, setActions] = useState<Action[] | null>([]);
   const [totalDeposited, setTotalDeposited] = useState<string | null>("0");
   const [totalClaimed, setTotalClaimed] = useState<string | null>("0");
-  const { balanceObject } = useEnvironmentContext();
+  const { balance } = useEnvironmentContext();
   // Get Net Spent
-  if (balanceObject == null) return <div></div>;
+  if (balance == null) return <div></div>;
   useEffect(() => {
     if (positions == null) return;
     console.log("positions");
@@ -107,18 +105,18 @@ export default function Page() {
         <BoxCard
           title="Positions"
           value={positions.length.toString()}
-          icon={<Notebook className="h-6 w-6 text-blue-500 " />}
+          icon={<Notebook className="h-6 w-6 text-stone-500 " />}
         />
         <BoxCard
           title="Net Spent"
           value={totalDeposited}
-          icon={<CircleDollarSign className="h-6 w-6 text-blue-500 " />}
+          icon={<CircleDollarSign className="h-6 w-6 text-stone-500 " />}
         />
 
         <BoxCard
           title="Claimed Fees"
           value={totalClaimed != "0" ? "+" + totalClaimed : totalClaimed}
-          icon={<BaggageClaim className="h-6 w-6 text-blue-500" />}
+          icon={<BaggageClaim className="h-6 w-6 text-stone-500" />}
         />
       </div>
       <PositionsCard positions={positions} />

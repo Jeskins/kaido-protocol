@@ -6,14 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TokenBalance } from "@/components/ui/token-balance";
+import { TokenBalance } from "@/components/ui/custom/token-balance";
 
 export default function TokenBalanceCard({
-  balances,
-  usdBalances,
+  balance,
+  usdbalance,
 }: {
-  balances: Record<string, string>;
-  usdBalances: Record<string, string>;
+  balance: Record<string, string>;
+  usdbalance: Record<string, string>;
 }) {
   return (
     <Card className="col-span-2">
@@ -22,7 +22,7 @@ export default function TokenBalanceCard({
         <CardDescription>Track your crosschain portfolio.</CardDescription>
       </CardHeader>
       <CardContent>
-        <TokenBalance balances={balances} usdBalances={usdBalances} />
+        <TokenBalance balance={balance} usdbalance={usdbalance} />
       </CardContent>
     </Card>
   );

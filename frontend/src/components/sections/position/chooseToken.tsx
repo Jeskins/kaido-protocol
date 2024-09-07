@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Menubar,
@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import { arbitrumSepolia } from "viem/chains";
 import { useEnvironmentContext } from "../context";
@@ -33,9 +32,8 @@ export default function ChooseToken({
   setToken: (fromToken: string) => void;
   txStarted: boolean;
 }) {
-  const { chainId } = useAccount();
   const [chevron, setChevron] = useState(true);
-  const { balanceObject } = useEnvironmentContext();
+  const { balance } = useEnvironmentContext();
   return (
     <Card className="w-full pt-2  border-none ">
       <CardTitle>
@@ -112,9 +110,10 @@ export default function ChooseToken({
       <CardFooter className="pb-4 px-2 flex justify-between text-muted-foreground">
         <p className="text-xs ">{supportedcoins[token].name}</p>
 
+        {/* TODO: 
         <p className="text-end text-xs font-medium">
-          Balance: {balanceObject[chainId || arbitrumSepolia.id][token]}
-        </p>
+          Balance: {balance[chainId || arbitrumSepolia.id][token]}
+        </p> */}
       </CardFooter>
     </Card>
   );

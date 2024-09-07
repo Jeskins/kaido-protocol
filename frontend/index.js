@@ -1,4 +1,4 @@
-const tempBalanceObject = {
+const tempbalance = {
   421614: {
     native: "0.158074408900890643",
     link: "100",
@@ -18,5 +18,5 @@ const tempBalanceObject = {
 };
 
 console.log("TEMP BALANCE OBJECT");
-console.log(tempBalanceObject);
-console.log(JSON.stringify(tempBalanceObject));
+console.log(tempbalance);
+console.log(JSON.stringify(tempbalance));

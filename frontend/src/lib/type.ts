@@ -1,3 +1,9 @@
+import {
+  SIWECreateMessageArgs,
+  SIWESession,
+  SIWEVerifyMessageArgs,
+} from "@web3modal/siwe";
+
 export type Address = `0x${string}`;
 
 export type Action = {
@@ -77,3 +83,86 @@ export type PositionDetailed = {
     id: string;
   };
 };
+
+export interface Convo {
+  id: string;
+  isAI: boolean;
+  message: string;
+}
+export interface ClassifyResponse {
+  response: string;
+  action: string;
+  params: string;
+  suggestions: string[];
+}
+export type KintoSDK = {
+  connect: () => Promise<KintoAccountInfo>;
+  sendTransaction: (txs: TxCall[]) => Promise<void>;
+  createNewWallet: () => Promise<void>;
+};
+export interface balance {
+  eth: string;
+  usdc: string;
+  weth: string;
+  usdt: string;
+  link: string;
+}
+export interface AppMetadata {
+  parent: `0x${string}`;
+  paymasterBalance: number;
+  tokenId: number;
+  dsaEnabled: boolean;
+  rateLimitPeriod: number;
+  rateLimitNumber: number;
+  gasLimitPeriod: number;
+  gasLimitCost: number;
+  name: string;
+  devEOAs: string[];
+  appContracts: string[];
+}
+export interface KintoAccountInfo {
+  exists: boolean;
+  approval?: boolean;
+  walletAddress?: `0x${string}`;
+  app: AppMetadata;
+  appKey?: `0x${string}`;
+}
+export interface TxCall {
+  to: `0x${string}`;
+  data: `0x${string}`;
+  value: bigint;
+}
+
+export interface SIWEConfig {
+  // Required
+  getNonce: () => Promise<string>;
+  createMessage: (args: SIWECreateMessageArgs) => string;
+  verifyMessage: (args: SIWEVerifyMessageArgs) => Promise<boolean>;
+  getSession: () => Promise<SIWESession | null>;
+  signOut: () => Promise<boolean>;
+
+  // Optional
+  onSignIn?: (session?: SIWESession) => void;
+  onSignOut?: () => void;
+  // Defaults to true
+  enabled?: boolean;
+  // In milliseconds, defaults to 5 minutes
+  nonceRefetchIntervalMs?: number;
+  // In milliseconds, defaults to 5 minutes
+  sessionRefetchIntervalMs?: number;
+  // Defaults to true
+  signOutOnDisconnect?: boolean;
+  // Defaults to true
+  signOutOnAccountChange?: boolean;
+  // Defaults to true
+  signOutOnNetworkChange?: boolean;
+}
+
+export interface KYCViewerInfo {
+  isIndividual: boolean;
+  isCorporate: boolean;
+  isKYC: boolean;
+  isSanctionsSafe: boolean;
+  getCountry: string;
+  getWalletOwners: Address[];
+}

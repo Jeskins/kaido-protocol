@@ -1,12 +1,25 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
-
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { createKintoSDK } from "kinto-web-sdk";
+import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";
+import { createPublicClient, formatEther, http } from "viem";
+import { kinto } from "@/lib/config";
+import getAllbalance from "@/lib/helpers/getAllBalances";
 interface BalanceContextType {
+  kintoSDK: KintoSDK;
+  address: string;
+  setAddress: (address: string) => void;
   totalBalance: number | null;
   setTotalBalance: (totalBalance: number) => void;
-  balanceObject: any;
-  setBalanceObject: (balanceObject: any) => void;
-  balanceObjectInUSD: any;
-  setBalanceObjectInUSD: (balanceObjectInUSD: any) => void;
+  balance: any;
+  setBalance: (balance: any) => void;
+  balanceInUSD: any;
+  setBalanceInUSD: (balanceInUSD: any) => void;
   openAi: boolean;
   setOpenAi: (openAi: boolean) => void;
   actionParams: string;
@@ -17,6 +30,14 @@ interface BalanceContextType {
   setOpenPositionTransactionModal: (
     openPositionTransactionModal: boolean
   ) => void;
+  openFaucet: boolean;
+  setOpenFacuet: (openFaucet: boolean) => void;
+  publicClient: any;
+  setPublicClient: (publicClient: any) => void;
+  convos: Convo[];
+  setConvos: (convos: Convo[]) => void;
+  classifyResponse: ClassifyResponse;
+  setClassifyResponse: (classifyResponse: ClassifyResponse) => void;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -30,23 +51,58 @@ export const useEnvironmentContext = () => {
 };
 
 export const BalanceProvider = ({ children }: { children: ReactNode }) => {
+  const appAddress = process.env.NEXT_PUBLIC_KINTO_APP_ADDRESS || "";
+  const kintoSDK = createKintoSDK(appAddress);
+  const [balance, setBalance] = useState<balance | null>(null);
+  const [balanceInUSD, setBalanceInUSD] = useState<balance | null>(null);
+  const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
+    response: "",
+    action: "",
+    params: "",
+    suggestions: [],
+  });
+  const [convos, setConvos] = useState<Convo[]>([]);
+  const [openFaucet, setOpenFacuet] = useState<boolean>(true);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
-  const [balanceObject, setBalanceObject] = useState<any>(null);
-  const [balanceObjectInUSD, setBalanceObjectInUSD] = useState<any>(null);
   const [openAi, setOpenAi] = useState<boolean>(false);
   const [actionParams, setActionParams] = useState<string>("");
   const [action, setAction] = useState<string>("");
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
+  const [address, setAddress] = useState("");
+  const [publicClient, setPublicClient] = useState<any>(null);
+  useEffect(() => {
+    const client = createPublicClient({
+      chain: kinto,
+      transport: http(),
+    });
+    setPublicClient(client);
+  }, []);
+
+  useEffect(() => {
+    if (address == "" || publicClient == null) return;
+    (async function () {
+      await getAllbalance(
+        publicClient,
+        address,
+        setTotalBalance,
+        setBalance,
+        setBalanceInUSD
+      );
+    })();
+  }, [address]);
   return (
     <BalanceContext.Provider
       value={{
+        kintoSDK,
+        address,
+        setAddress,
         totalBalance,
         setTotalBalance,
-        balanceObject,
-        setBalanceObject,
-        balanceObjectInUSD,
-        setBalanceObjectInUSD,
+        balanceInUSD,
+        setBalanceInUSD,
+        balance,
+        setBalance,
         openAi,
         setOpenAi,
         actionParams,
@@ -55,6 +111,14 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setAction,
         openPositionTransactionModal,
         setOpenPositionTransactionModal,
+        publicClient,
+        setPublicClient,
+        classifyResponse,
+        setClassifyResponse,
+        convos,
+        setConvos,
+        openFaucet,
+        setOpenFacuet,
       }}
     >
       {children}

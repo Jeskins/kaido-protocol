@@ -7,100 +7,78 @@ import Stake from "@/components/sections/stake/stake";
 import StakeTransaction from "@/components/sections/stake/transaction";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import ConnectButton from "@/components/ui/connect-button";
-import { config } from "@/lib/config";
-import { supportedchains } from "@/lib/constants";
+import ConnectButton from "@/components/ui/custom/connect-button";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { formatEther, parseEther } from "viem";
-import { useAccount, useBalance, useReadContract, useSwitchChain } from "wagmi";
 
 export default function StakePage() {
   const [stakeAmount, setStakeAmount] = useState("0");
   const [stoneAmount, setStoneAmount] = useState("0");
-  const { address, chainId } = useAccount();
-  const { switchChain } = useSwitchChain();
-  const { data } = useBalance({ address });
   const [open, setOpen] = useState(false);
-  const { action, actionParams, balanceObject } = useEnvironmentContext();
+  const { action, actionParams, balance } = useEnvironmentContext();
 
-  if (balanceObject == null) return <div></div>;
+  if (balance == null) return <div></div>;
 
-  const { data: sharePrice } = useReadContract({
-    config,
-    chainId: chainId as any,
-    functionName: "currentSharePrice",
-    address: supportedchains[chainId as any].stake,
-    args: [],
-    abi: [
-      {
-        inputs: [],
-        name: "currentSharePrice",
-        outputs: [
-          {
-            internalType: "uint256",
-            name: "price",
-            type: "uint256",
-          },
-        ],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-  });
+  // TODO
+  // const { data: sharePrice } = useReadContract({
+  //   config,
+  //   chainId: chainId as any,
+  //   functionName: "currentSharePrice",
+  //   address: supportedchains[chainId as any].stake,
+  //   args: [],
+  //   abi: [
+  //     {
+  //       inputs: [],
+  //       name: "currentSharePrice",
+  //       outputs: [
+  //         {
+  //           internalType: "uint256",
+  //           name: "price",
+  //           type: "uint256",
+  //         },
+  //       ],
+  //       stateMutability: "nonpayable",
+  //       type: "function",
+  //     },
+  //   ],
+  // });
 
-  useEffect(() => {
-    setStoneAmount(
-      roundUpToFiveDecimals(
-        (
-          parseFloat(stakeAmount) /
-          parseFloat(formatEther(sharePrice || BigInt("0")))
-        ).toString()
-      )
-    );
-  }, [sharePrice, stakeAmount]);
+  // TODO
+  // useEffect(() => {
+  //   setStoneAmount(
+  //     roundUpToFiveDecimals(
+  //       (
+  //         parseFloat(stakeAmount) /
+  //         parseFloat(formatEther(sharePrice || BigInt("0")))
+  //       ).toString()
+  //     )
+  //   );
+  // }, [sharePrice, stakeAmount]);
 
-  useEffect(() => {
-    if (chainId == 56 || chainId == 97) switchChain({ chainId: 11155111 });
-  }, [chainId]);
-
-  if (chainId == 56 || chainId == 97)
-    return (
-      <div className="flex flex-col space-y-4 justify-center items-center my-auto">
-        <p className="text-lg font-semibold">
-          Please switch your chain to{" "}
-          <span className="text-primary">Stake</span>
-        </p>
-        <div className="flex flex-col items-center">
-          <ConnectButton />
-        </div>
-      </div>
-    );
-  useEffect(() => {
-    if (action == "stake" && actionParams.length > 0) {
-      const p = actionParams.split("_");
-      setStakeAmount(p[1]);
-      const c = parseInt(p[0]);
-      if (c != chainId) {
-        switchChain({ chainId: c });
-      }
-    }
-  }, [action, actionParams]);
+  // useEffect(() => {
+  //   if (action == "stake" && actionParams.length > 0) {
+  //     const p = actionParams.split("_");
+  //     setStakeAmount(p[1]);
+  //     const c = parseInt(p[0]);
+  //   }
+  // }, [action, actionParams]);
   return (
     <div className="flex justify-center items-center h-full">
-      <Card className="border-none w-[500px] ">
+      <p className="font-semibold text-sm select-none">Coming Soon</p>
+      {/* <Card className="border-none w-[500px] ">
         <SwitchChainHeader />
         <CardContent>
           <ApyTvl />
           <Stake
             stakeAmount={stakeAmount}
             setStakeAmount={setStakeAmount}
-            balance={data?.formatted || "0"}
+            balance={balance}
           />
 
           <Receive
-            stonePrice={formatEther(sharePrice || BigInt("0"))}
+            stonePrice={formatEther(BigInt("1"))}
             stoneAmount={stoneAmount}
           />
           <div className="px-4">
@@ -109,13 +87,13 @@ export default function StakePage() {
               disabled={
                 stakeAmount == "" ||
                 parseFloat(stakeAmount) == 0.0 ||
-                parseFloat(stakeAmount) >= parseFloat(data?.formatted || "0")
+                parseFloat(stakeAmount) >= parseFloat(balance)
               }
               onClick={() => {
                 setOpen(true);
               }}
             >
-              {parseFloat(stakeAmount) >= parseFloat(data?.formatted || "0")
+              {parseFloat(stakeAmount) >= parseFloat(balance)
                 ? "Insufficient Balance"
                 : parseFloat(stakeAmount) == 0.0
                 ? "Enter Amount to Stake"
@@ -140,7 +118,7 @@ export default function StakePage() {
         stoneAmount={stoneAmount}
         open={open}
         setOpen={setOpen}
-      />
+      /> */}
     </div>
   );
 }

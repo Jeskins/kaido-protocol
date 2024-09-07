@@ -1,9 +1,15 @@
 import Image from "next/image";
-import ConnectButton from "../ui/connect-button";
-import { HeroHighlight, Highlight } from "../ui/hero-highlight";
+import { HeroHighlight, Highlight } from "../ui/custom-ui/hero-highlight";
 import { motion } from "framer-motion";
-
+import { Button } from "../ui/button";
+import { useEnvironmentContext } from "./context";
+import { useState } from "react";
+import "@/styles/spinner.css";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 export default function DefaultLanding() {
+  const { kintoSDK, setAddress } = useEnvironmentContext();
+  const [kintoConnecting, setKintoConnecting] = useState(false);
+  const { open } = useWeb3Modal();
   return (
     <HeroHighlight className="select-none">
       <motion.h1
@@ -45,34 +51,47 @@ export default function DefaultLanding() {
         </p>
         <p className="text-2xl"></p>
         <div>
-          <ConnectButton />
+          <Button
+            onClick={async () => {
+              setKintoConnecting(true);
+              try {
+                const res = await kintoSDK.connect();
+                setAddress(res.walletAddress || "0x");
+              } catch (error) {
+                console.error("Failed to fetch account info:", error);
+              }
+              setKintoConnecting(false);
+            }}
+          >
+            {kintoConnecting ? (
+              <div className="w-[150px] flex justify-center">
+                <div className="black-spinner"></div>
+              </div>
+            ) : (
+              "Connect Your Kinto Wallet"
+            )}
+          </Button>
+          <p className="text-xs font-medium text-stone-400 mt-1 cursor-pointer">
+            Don't have an account? &nbsp;
+            <span
+              className="underline hover:text-white"
+              onClick={() => {
+                kintoSDK
+                  .createNewWallet()
+                  .then(() => {
+                    console.log("New wallet created successfully");
+                  })
+                  .catch((error) => {
+                    console.error("Failed to create new wallet:", error);
+                  });
+              }}
+            >
+              Create Wallet
+            </span>
+          </p>
+          {/* <ConnectButton /> */}
         </div>
       </motion.h1>
     </HeroHighlight>
   );
-  // return (
-  //   <div className="flex-1 flex flex-col justify-center items-center">
-  //     <Image
-  //       src={"/logotext.jpeg"}
-  //       height={100}
-  //       width={200}
-  //       alt="Logo"
-  //       className="mb-5"
-  //     />
-  //     <p className="pb-6 font-semibold text-sm">
-  //       Beginner friendly UniswapV3 on  powered by AI
-  //     </p>
-
-  //     {/* <Image
-  //       src={"/hero.png"}
-  //       height={200}
-  //       width={600}
-  //       alt="Avatar"
-  //       className="rounded-md"
-  //     /> */}
-  //     <div className="py-4 flex">
-  //       <ConnectButton />
-  //     </div>
-  //   </div>
-  // );
 }

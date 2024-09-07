@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Menubar,
@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import Spinner from "@/components/ui/loading";
 import { arbitrumSepolia } from "viem/chains";
@@ -29,7 +28,6 @@ export default function To({
   toLoading: boolean;
   isTestnet: boolean;
 }) {
-  const { chainId } = useAccount();
   const [toChevron, setToChevron] = useState(true);
   return (
     <Card className="w-full pt-4 border-none bg-secondary">
@@ -70,28 +68,30 @@ export default function To({
               </div>
             </MenubarTrigger>
             <MenubarContent>
-              {Object.entries(supportedcoins)
-                .slice(2, 7)
-                .map(([coinId, coin]) => (
-                  <MenubarItem
-                    disabled={coinId == fromToken}
-                    onClick={() => {
-                      setToToken(coinId);
-                      setToChevron(true);
-                    }}
-                  >
-                    <div className="flex space-x-2">
-                      <Image
-                        src={coin.image}
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rounded-full"
-                      />
-                      <p>{coin.symbol}</p>
-                    </div>
-                  </MenubarItem>
-                ))}
+              {Object.entries(supportedcoins).map(([coinId, coin]) => (
+                <MenubarItem
+                  disabled={
+                    coinId == fromToken ||
+                    (coinId == "eth" && fromToken == "weth") ||
+                    (coinId == "weth" && fromToken == "eth")
+                  }
+                  onClick={() => {
+                    setToToken(coinId);
+                    setToChevron(true);
+                  }}
+                >
+                  <div className="flex space-x-2">
+                    <Image
+                      src={coin.image}
+                      width={20}
+                      height={20}
+                      alt=""
+                      className="rounded-full"
+                    />
+                    <p>{coin.symbol}</p>
+                  </div>
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>

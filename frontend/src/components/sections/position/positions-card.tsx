@@ -5,8 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Positions } from "@/components/ui/positions";
-import PositionsHeader from "@/components/ui/positions-header";
+import { Positions } from "@/components/ui/custom/positions";
+import PositionsHeader from "@/components/ui/custom/positions-header";
 import { Position } from "@/lib/type";
 
 export default function PositionsCard({

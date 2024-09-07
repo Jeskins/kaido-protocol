@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import From from "./from";
 import To from "./to";
-import { useAccount, useSwitchChain } from "wagmi";
 import Slippage from "./slippage";
 import Spinner from "@/components/ui/loading";
 import Image from "next/image";
@@ -39,13 +38,6 @@ export default function Swap({
   openTransaction,
   isTestnet,
 }: SwapProps) {
-  const { chainId } = useAccount();
-  if (chainId == undefined)
-    return (
-      <div className="w-[75%] flex flex-col justify-center items-center">
-        <Spinner />
-      </div>
-    );
   return (
     <Card className="border-none w-[490px]">
       <CardContent className="relative ">
