@@ -12,11 +12,6 @@ import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
 import { arbitrumSepolia } from "viem/chains";
 import KintoButton from "@/components/ui/custom/kinto-button";
-interface ClassifyResponse {
-  response: string;
-  action: string;
-  params: string;
-}
 
 export default function PoolPage() {
   const { address, balance } = useEnvironmentContext();

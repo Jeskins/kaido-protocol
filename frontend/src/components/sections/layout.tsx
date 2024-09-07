@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/custom-ui/hero-highlight";
 import { motion } from "framer-motion";
 import DefaultLanding from "./default-landing";
+import { Faucet } from "../ui/faucet";
 interface Convo {
   id: string;
   isAI: boolean;
@@ -55,16 +56,8 @@ export default function Layout({ children }: LayoutProps) {
     action: "",
     params: "",
   });
-  const {
-    balance,
-    balanceInUSD,
-    setActionParams,
-    action,
-    setAction,
-    actionParams,
-  } = useEnvironmentContext();
-  const { openAi, setOpenAi } = useEnvironmentContext();
-  const [thinking, setThinking] = useState(false);
+  const { setActionParams, action, setAction, openAi, setOpenAi } =
+    useEnvironmentContext();
   const [convos, setConvos] = useState<Convo[]>([]);
 
   useEffect(() => {
@@ -94,7 +87,6 @@ export default function Layout({ children }: LayoutProps) {
                   <MainNav
                     className="mx-6"
                     setOpenAi={async (path: string) => {
-                      setThinking(true);
                       setOpenAi(true);
                       try {
                         const response = await axios.post("/api/classify", {
@@ -129,7 +121,6 @@ export default function Layout({ children }: LayoutProps) {
                           },
                         ]);
                       }
-                      setThinking(false);
                     }}
                   />
                 </div>
@@ -177,18 +168,12 @@ export default function Layout({ children }: LayoutProps) {
                   />
                 </SheetTitle>
                 <SheetDescription className="h-screen">
-                  <AIComponent
-                    convos={convos}
-                    setConvos={setConvos}
-                    setClassifyResponse={setClassifyResponse}
-                    thinking={thinking}
-                    setAction={setAction}
-                    setActionParams={setActionParams}
-                  />
+                  <AIComponent />
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>
           </Sheet>
+          <Faucet />
         </div>
       )}
     </>

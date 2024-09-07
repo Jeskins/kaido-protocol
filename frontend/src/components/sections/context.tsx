@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { createKintoSDK } from "kinto-web-sdk";
-import { balance, KintoSDK } from "@/lib/type";
+import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";
 import { createPublicClient, formatEther, http } from "viem";
 import { kinto } from "@/lib/config";
 import getAllbalance from "@/lib/helpers/getAllBalances";
@@ -14,8 +14,6 @@ interface BalanceContextType {
   kintoSDK: KintoSDK;
   address: string;
   setAddress: (address: string) => void;
-  appName: string;
-  setAppName: (appName: string) => void;
   totalBalance: number | null;
   setTotalBalance: (totalBalance: number) => void;
   balance: any;
@@ -32,9 +30,14 @@ interface BalanceContextType {
   setOpenPositionTransactionModal: (
     openPositionTransactionModal: boolean
   ) => void;
-
+  openFaucet: boolean;
+  setOpenFacuet: (openFaucet: boolean) => void;
   publicClient: any;
   setPublicClient: (publicClient: any) => void;
+  convos: Convo[];
+  setConvos: (convos: Convo[]) => void;
+  classifyResponse: ClassifyResponse;
+  setClassifyResponse: (classifyResponse: ClassifyResponse) => void;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -52,7 +55,14 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const kintoSDK = createKintoSDK(appAddress);
   const [balance, setBalance] = useState<balance | null>(null);
   const [balanceInUSD, setBalanceInUSD] = useState<balance | null>(null);
-
+  const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
+    response: "",
+    action: "",
+    params: "",
+    suggestions: [],
+  });
+  const [convos, setConvos] = useState<Convo[]>([]);
+  const [openFaucet, setOpenFacuet] = useState<boolean>(true);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [openAi, setOpenAi] = useState<boolean>(false);
   const [actionParams, setActionParams] = useState<string>("");
@@ -60,9 +70,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
   const [address, setAddress] = useState("");
-  const [appName, setAppName] = useState("");
   const [publicClient, setPublicClient] = useState<any>(null);
-
   useEffect(() => {
     const client = createPublicClient({
       chain: kinto,
@@ -89,8 +97,6 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         kintoSDK,
         address,
         setAddress,
-        appName,
-        setAppName,
         totalBalance,
         setTotalBalance,
         balanceInUSD,
@@ -107,6 +113,12 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setOpenPositionTransactionModal,
         publicClient,
         setPublicClient,
+        classifyResponse,
+        setClassifyResponse,
+        convos,
+        setConvos,
+        openFaucet,
+        setOpenFacuet,
       }}
     >
       {children}

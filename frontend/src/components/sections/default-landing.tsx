@@ -7,7 +7,7 @@ import { useState } from "react";
 import "@/styles/spinner.css";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 export default function DefaultLanding() {
-  const { kintoSDK, setAddress, setAppName } = useEnvironmentContext();
+  const { kintoSDK, setAddress } = useEnvironmentContext();
   const [kintoConnecting, setKintoConnecting] = useState(false);
   const { open } = useWeb3Modal();
   return (
@@ -52,26 +52,20 @@ export default function DefaultLanding() {
         <p className="text-2xl"></p>
         <div>
           <Button
-            onClick={() => {
+            onClick={async () => {
               setKintoConnecting(true);
-              kintoSDK
-                .connect()
-                .then((accountInfo) => {
-                  console.log("Connected account info:", accountInfo);
-                  setAddress(accountInfo.walletAddress || "0x");
-                  setAppName(accountInfo.app.name);
-                })
-                .catch((error) => {
-                  console.error("Failed to connect:", error);
-                })
-                .finally(() => {
-                  setKintoConnecting(false);
-                });
+              try {
+                const res = await kintoSDK.connect();
+                setAddress(res.walletAddress || "0x");
+              } catch (error) {
+                console.error("Failed to fetch account info:", error);
+              }
+              setKintoConnecting(false);
             }}
           >
             {kintoConnecting ? (
               <div className="w-[150px] flex justify-center">
-                <div className="black-spinner "></div>
+                <div className="black-spinner"></div>
               </div>
             ) : (
               "Connect Your Kinto Wallet"

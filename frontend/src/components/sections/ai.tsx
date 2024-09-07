@@ -14,30 +14,18 @@ import { useAccount } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
 
-interface Convo {
-  id: string;
-  isAI: boolean;
-  message: string;
-}
-
-export default function AIComponent({
-  convos,
-  setConvos,
-  setClassifyResponse,
-  thinking,
-  setAction,
-  setActionParams,
-}: {
-  convos: Convo[];
-  setConvos: (convos: Convo[]) => void;
-  setClassifyResponse: (response: any) => void;
-  thinking: boolean;
-  setAction: (action: string) => void;
-  setActionParams: (params: string) => void;
-}) {
+export default function AIComponent() {
   const { address } = useAccount();
+  const [thinking, setThinking] = useState(false);
   const [prompt, setPrompt] = useState<string>("");
-  const { setOpenAi } = useEnvironmentContext();
+  const {
+    setOpenAi,
+    convos,
+    setConvos,
+    setAction,
+    setActionParams,
+    setClassifyResponse,
+  } = useEnvironmentContext();
   const { open } = useWeb3Modal();
   return (
     <div

@@ -84,6 +84,17 @@ export type PositionDetailed = {
   };
 };
 
+export interface Convo {
+  id: string;
+  isAI: boolean;
+  message: string;
+}
+export interface ClassifyResponse {
+  response: string;
+  action: string;
+  params: string;
+  suggestions: string[];
+}
 export type KintoSDK = {
   connect: () => Promise<KintoAccountInfo>;
   sendTransaction: (txs: TxCall[]) => Promise<void>;
@@ -145,4 +156,13 @@ export interface SIWEConfig {
   signOutOnAccountChange?: boolean;
   // Defaults to true
   signOutOnNetworkChange?: boolean;
+}
+
+export interface KYCViewerInfo {
+  isIndividual: boolean;
+  isCorporate: boolean;
+  isKYC: boolean;
+  isSanctionsSafe: boolean;
+  getCountry: string;
+  getWalletOwners: Address[];
 }

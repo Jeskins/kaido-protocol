@@ -7,7 +7,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "../../ui/button";
-import { supportedcoins } from "@/lib/constants";
+import {
+  altPoolAbi,
+  depositAbi,
+  kintoInfo,
+  poolAbi,
+  supportedcoins,
+} from "@/lib/constants";
 import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
@@ -15,9 +21,10 @@ import { use, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { erc20Abi, parseEther, zeroAddress } from "viem";
+import { encodeFunctionData, erc20Abi, parseEther, zeroAddress } from "viem";
 import { arbitrumSepolia } from "viem/chains";
 import { useEnvironmentContext } from "../context";
+import watchContractEvents from "@/lib/helpers/pool/watch-contract-events";
 export default function Transaction({
   open,
   setOpen,
@@ -36,41 +43,78 @@ export default function Transaction({
   toAmount: string;
 }) {
   const [completedTxs, setCompletedTxs] = useState(0);
+  const [depositTx, setDepositTx] = useState("");
   const [approveTx, setApproveTx] = useState("");
   const [actionTx, setActionTx] = useState("");
   const { toast } = useToast();
   const { address } = useEnvironmentContext();
   const [txStarted, setTxStarted] = useState(0);
-  const [pool, setPool] = useState(zeroAddress);
-  const [fromIsTokenA, setFromIsTokenA] = useState(true);
-  // useEffect(() => {
-  //   console.log("FROM AMOUNT");
-  //   console.log(fromAmount);
-  //   console.log("TO AMOUNT");
-  //   console.log(toAmount);
-  //   let tempPool;
-  //   if (
-  //     supportedchains[chainId || arbitrumSepolia.id].pools[
-  //       ((fromToken as string) + toToken) as string
-  //     ] == undefined
-  //   ) {
-  //     setFromIsTokenA(true);
-  //     tempPool =
-  //       supportedchains[chainId || arbitrumSepolia.id].pools[
-  //         ((toToken as string) + fromToken) as string
-  //       ];
-  //   } else {
-  //     setFromIsTokenA(false);
-  //     tempPool =
-  //       supportedchains[chainId || arbitrumSepolia.id].pools[
-  //         ((fromToken as string) + toToken) as string
-  //       ];
-  //   }
+  const { kintoSDK, publicClient } = useEnvironmentContext();
+  const [isDeposit, setIsDeposit] = useState(false);
+  const [pool, setPool] = useState<`0x${string}`>(zeroAddress);
+  const [zeroIsFrom, setZeroIsFrom] = useState(false);
+  const [depositTxStarted, setDepositTxStarted] = useState(false);
+  useEffect(() => {
+    if (fromToken == "" || toToken == "") return;
+    const localFromToken = fromToken == "eth" ? "weth" : fromToken;
+    const localToToken = toToken == "eth" ? "weth" : toToken;
 
-  //   console.log("tempPool");
-  //   console.log(tempPool);
-  //   setPool(tempPool);
-  // }, [fromToken, toToken, chainId]);
+    if (
+      kintoInfo.pools[
+        (localFromToken + localToToken) as keyof typeof kintoInfo.pools
+      ] != undefined
+    ) {
+      setPool(
+        kintoInfo.pools[
+          (localFromToken + localToToken) as keyof typeof kintoInfo.pools
+        ] as `0x${string}`
+      );
+      setZeroIsFrom(true);
+    } else {
+      setPool(
+        kintoInfo.pools[
+          (localToToken + localFromToken) as keyof typeof kintoInfo.pools
+        ] as `0x${string}`
+      );
+      setZeroIsFrom(false);
+    }
+  }, [fromToken, toToken]);
+  useEffect(() => {
+    if (address == "") return;
+    setIsDeposit(fromToken == "eth");
+    watchContractEvents(
+      address as `0x${string}`,
+      publicClient,
+      kintoInfo.tokens[
+        fromToken as keyof typeof kintoInfo.tokens
+      ] as `0x${string}`,
+      fromToken == "eth",
+      setDepositTx,
+      setApproveTx,
+      setActionTx,
+      setCompletedTxs
+    );
+  }, []);
+
+  useEffect(() => {
+    if (depositTx != "") {
+      toast({
+        title: "Deposit Confirmed",
+        description: "Transaction Sent Successfully",
+        action: (
+          <ToastAction altText="Goto schedule to undo">
+            <Link
+              target="_blank"
+              href={`https://explorer.kinto.xyz/tx/` + depositTx}
+            >
+              View
+            </Link>
+          </ToastAction>
+        ),
+      });
+    }
+  }, [depositTx]);
+
   useEffect(() => {
     if (approveTx != "") {
       toast({
@@ -80,12 +124,7 @@ export default function Transaction({
           <ToastAction altText="Goto schedule to undo">
             <Link
               target="_blank"
-              href={
-                `supportedchains[(chainId || 11155111).toString()].explorer +
-                "tx/" +
-                approveTx`
-                // TODO
-              }
+              href={`https://explorer.kinto.xyz/tx/` + approveTx}
             >
               View
             </Link>
@@ -104,12 +143,7 @@ export default function Transaction({
           <ToastAction altText="Goto schedule to undo">
             <Link
               target="_blank"
-              href={
-                // TODO
-                ` supportedchains[(chainId || 11155111).toString()].explorer +
-                "tx/" +
-                actionTx`
-              }
+              href={`https://explorer.kinto.xyz/tx/` + actionTx}
             >
               View
             </Link>
@@ -167,92 +201,126 @@ export default function Transaction({
             </p>
           </div>
         </div>
-        <DialogFooter>
-          <Button
-            disabled={completedTxs > 0 || (txStarted == 1 && completedTxs == 0)}
-            onClick={async () => {
-              // TODO:
-              // setTxStarted(1);
-              // console.log("Approving");
-              // console.log(
-              //   supportedchains[chainId || arbitrumSepolia.id].tokens[fromToken]
-              // );
-              // try {
-              //   const tx = await writeContractAsync({
-              //     abi: erc20Abi,
-              //     address:
-              //       supportedchains[chainId || arbitrumSepolia.id].tokens[
-              //         fromToken
-              //       ],
-              //     functionName: "approve",
-              //     args: [
-              //       pool,
-              //       BigInt(parseEther(fromAmount)) /
-              //         (fromToken == "usdc"
-              //           ? BigInt("1000000000000")
-              //           : BigInt("1")),
-              //     ],
-              //   });
-              //   const txReceipt = await waitForTransactionReceipt(config, {
-              //     hash: tx,
-              //   });
-              //   setApproveTx(tx);
-              //   setCompletedTxs(completedTxs + 1);
-              // } catch (e) {
-              //   console.log(e);
-              //   setTxStarted(0);
-              // }
-            }}
-          >
-            {txStarted == 1 && completedTxs == 0 ? (
-              <div className="black-spinner"></div>
-            ) : (
-              `Approve ${supportedcoins[fromToken].symbol}`
-            )}
-          </Button>
-          <Button
-            disabled={
-              completedTxs == 0 || (txStarted == 2 && completedTxs == 1)
-            }
-            onClick={async () => {
-              setTxStarted(2);
-              console.log("Swapping");
-              console.log(fromAmount);
-              console.log(toAmount);
-              const args = [
-                address,
-                fromIsTokenA,
-                (fromIsTokenA ? "" : "-") +
-                  BigInt(parseEther(fromAmount)) /
-                    (fromToken == "usdc"
-                      ? BigInt("1000000000000")
-                      : BigInt("1")),
-                (fromIsTokenA ? "-" : "") +
-                  BigInt(parseEther(toAmount)) /
-                    (toAmount == "usdc"
-                      ? BigInt("1000000000000")
-                      : BigInt("1")),
-              ];
-              console.log(args);
-              try {
-                // const tx = await writeContractAsync({
-                //   abi: poolAbi,
-                //   address: pool,
-                //   functionName: "swap",
-                //   args,
-                // });
-                // setActionTx(tx);
+        {isDeposit && depositTx == "" ? (
+          <DialogFooter>
+            <Button
+              disabled={depositTxStarted}
+              onClick={async () => {
+                setDepositTxStarted(true);
 
-                setCompletedTxs(completedTxs + 1);
-              } catch (e) {
-                setTxStarted(1);
-                console.log(e);
+                try {
+                  const depositData = encodeFunctionData({
+                    abi: depositAbi,
+                    functionName: "deposit",
+                    args: [],
+                  });
+                  await kintoSDK.sendTransaction([
+                    {
+                      to: kintoInfo.ethDeposit as `0x${string}`,
+                      value: BigInt(parseEther(fromAmount)),
+                      data: depositData,
+                    },
+                  ]);
+                } catch (e) {
+                  console.log(e);
+                  setDepositTxStarted(false);
+                }
+              }}
+            >
+              {depositTxStarted ? (
+                <div className="black-spinner"></div>
+              ) : (
+                `Deposit ETH`
+              )}
+            </Button>
+          </DialogFooter>
+        ) : (
+          <DialogFooter>
+            <Button
+              disabled={
+                completedTxs > 0 || (txStarted == 1 && completedTxs == 0)
               }
-            }}
-          >
-            {action == "swap" ? "Perform Swap" : "Create Order"}
-          </Button>
-        </DialogFooter>
+              onClick={async () => {
+                setTxStarted(1);
+                console.log("Approving");
+
+                try {
+                  const approveData = encodeFunctionData({
+                    abi: erc20Abi,
+                    functionName: "approve",
+                    args: [
+                      address as `0x${string}`,
+                      BigInt(parseEther(fromAmount)) /
+                        (fromToken == "usdc"
+                          ? BigInt("1000000000000")
+                          : BigInt("1")),
+                    ],
+                  });
+
+                  await kintoSDK.sendTransaction([
+                    {
+                      to: kintoInfo.tokens[
+                        fromToken as keyof typeof kintoInfo.tokens
+                      ] as `0x${string}`,
+                      value: BigInt("0"),
+                      data: approveData,
+                    },
+                  ]);
+                } catch (e) {
+                  console.log(e);
+                  setTxStarted(0);
+                }
+              }}
+            >
+              {txStarted == 1 && completedTxs == 0 ? (
+                <div className="black-spinner"></div>
+              ) : (
+                `Approve ${supportedcoins[fromToken].symbol}`
+              )}
+            </Button>
+            <Button
+              disabled={
+                completedTxs == 0 || (txStarted == 2 && completedTxs == 1)
+              }
+              onClick={async () => {
+                setTxStarted(2);
+                const amount0 = zeroIsFrom ? fromAmount : toAmount;
+                const amount1 = zeroIsFrom ? toAmount : fromAmount;
+                const token0 = zeroIsFrom ? fromToken : toToken;
+                const token1 = zeroIsFrom ? toToken : fromToken;
+                const args = [
+                  address,
+                  !zeroIsFrom,
+                  BigInt(parseEther(amount0)) /
+                    (token0 == "usdc" ? BigInt("1000000000000") : BigInt("1")),
+
+                  BigInt(parseEther(amount1)) /
+                    (token1 == "usdc" ? BigInt("1000000000000") : BigInt("1")),
+                ];
+                console.log(args);
+                try {
+                  const swapData = encodeFunctionData({
+                    abi: altPoolAbi,
+                    functionName: "swap",
+                    args,
+                  });
+                  await kintoSDK.sendTransaction([
+                    {
+                      to: pool as `0x${string}`,
+                      value: BigInt("0"),
+                      data: swapData,
+                    },
+                  ]);
+                } catch (e) {
+                  console.log(e);
+                  setTxStarted(1);
+                }
+              }}
+            >
+              {action == "swap" ? "Perform Swap" : "Create Order"}
+            </Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );
