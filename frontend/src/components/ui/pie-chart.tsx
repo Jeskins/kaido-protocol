@@ -20,61 +20,61 @@ import {
 } from "@/components/ui/chart";
 
 export function PieChartComponent({
-  usdBalances,
+  usdbalance,
   hideTestnet,
 }: {
-  usdBalances: Record<string, string>;
+  usdbalance: Record<string, string>;
   hideTestnet: boolean;
 }) {
   const chartData = [
     {
       token: "bnb",
-      balance: parseFloat(usdBalances.bnb),
+      balance: parseFloat(usdbalance.bnb),
       fill: "var(--color-bnb)",
     },
     {
       token: "eth",
-      balance: parseFloat(usdBalances.eth),
+      balance: parseFloat(usdbalance.eth),
       fill: "var(--color-eth)",
     },
     {
       token: "usdc",
-      balance: parseFloat(usdBalances.usdc),
+      balance: parseFloat(usdbalance.usdc),
       fill: "var(--color-usdc)",
     },
     {
       token: "usdt",
-      balance: parseFloat(usdBalances.usdt),
+      balance: parseFloat(usdbalance.usdt),
       fill: "var(--color-usdt)",
     },
     {
       token: "link",
-      balance: parseFloat(usdBalances.link),
+      balance: parseFloat(usdbalance.link),
       fill: "var(--color-link)",
     },
     {
       token: "tbnb",
-      balance: parseFloat(usdBalances.tbnb),
+      balance: parseFloat(usdbalance.tbnb),
       fill: "var(--color-tbnb)",
     },
     {
       token: "teth",
-      balance: parseFloat(usdBalances.teth),
+      balance: parseFloat(usdbalance.teth),
       fill: "var(--color-teth)",
     },
     {
       token: "tusdc",
-      balance: parseFloat(usdBalances.tusdc),
+      balance: parseFloat(usdbalance.tusdc),
       fill: "var(--color-tusdc)",
     },
     {
       token: "tusdt",
-      balance: parseFloat(usdBalances.tusdt),
+      balance: parseFloat(usdbalance.tusdt),
       fill: "var(--color-tusdt)",
     },
     {
       token: "tlink",
-      balance: parseFloat(usdBalances.tlink),
+      balance: parseFloat(usdbalance.tlink),
       fill: "var(--color-tlink)",
     },
   ];

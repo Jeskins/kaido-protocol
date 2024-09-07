@@ -12,7 +12,7 @@ import {
   MenubarItem,
   MenubarMenu,
 } from "@/components/ui/menubar";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 
 import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -46,10 +46,9 @@ export default function PoolPage() {
 
   const [chainChevron, setChainChevron] = useState(true);
   const { action, actionParams } = useEnvironmentContext();
-  const { balanceObject } = useEnvironmentContext();
   const [aiTriggered, setAiTriggered] = useState(false);
 
-  if (balanceObject == null) return <div></div>;
+  if (balance == null) return <div></div>;
 
   useEffect(() => {
     (async function () {
@@ -208,7 +207,7 @@ export default function PoolPage() {
               toAmount,
               setSlippage,
               slippage,
-              fromBalance: balanceObject[arbitrumSepolia.id][fromToken],
+              fromBalance: balance[arbitrumSepolia.id][fromToken],
               toLoading,
               triggerAction: () => {
                 setOpenTransaction(true);

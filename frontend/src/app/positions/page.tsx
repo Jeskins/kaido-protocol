@@ -23,9 +23,9 @@ export default function Page() {
   const [actions, setActions] = useState<Action[] | null>([]);
   const [totalDeposited, setTotalDeposited] = useState<string | null>("0");
   const [totalClaimed, setTotalClaimed] = useState<string | null>("0");
-  const { balanceObject } = useEnvironmentContext();
+  const { balance } = useEnvironmentContext();
   // Get Net Spent
-  if (balanceObject == null) return <div></div>;
+  if (balance == null) return <div></div>;
   useEffect(() => {
     if (positions == null) return;
     console.log("positions");

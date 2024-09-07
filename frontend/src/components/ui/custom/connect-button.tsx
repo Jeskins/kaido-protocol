@@ -9,8 +9,6 @@ import {
   MenubarMenu,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { supportedchains } from "@/lib/constants";
-import { ArrowLeftCircleIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEnvironmentContext } from "../../sections/context";
@@ -22,73 +20,10 @@ export default function ConnectButton() {
 
   return address != "" ? (
     <>
-      <Menubar
-        onClick={() => {
-          setChainChevron(!chainChevron);
-        }}
-        className="border-none text-sm py-auto bg-secondary mx-2 my-auto rounded-md"
-      >
-        <MenubarMenu>
-          <MenubarTrigger
-            className="w-full"
-            onClick={() => {
-              setChainChevron(!chainChevron);
-            }}
-          >
-            <div className="flex space-x-2 items-center w-full justify-between">
-              <div className="flex space-x-2">
-                <Image
-                  src={"/coins/kinto.png"}
-                  width={20}
-                  height={20}
-                  alt=""
-                  className="rounded-full"
-                />
-                <p>Kinto Mainnet</p>
-              </div>
-
-              {!chainChevron ? (
-                <ChevronUp size={20} />
-              ) : (
-                <ChevronDown size={20} />
-              )}
-            </div>
-          </MenubarTrigger>
-          <MenubarContent className="w-full">
-            {Object.values(supportedchains)
-              .sort((a, b) => a.id - b.id)
-              .map((chain) => (
-                <MenubarItem
-                  key={chain.id}
-                  className=" cursor-pointer w-full"
-                  onClick={async () => {
-                    // try {
-                    //   await switchChainAsync({
-                    //     chainId: chain.chainId,
-                    //   });
-                    //   setChainChevron(true);
-                    // } catch (e) {
-                    //   console.log(e);
-                    // }
-                  }}
-                >
-                  <div className="flex space-x-2 items-center w-full justify-between">
-                    <div className="flex space-x-2">
-                      <Image
-                        src={chain.image}
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rounded-full"
-                      />
-                      <p>{chain.name}</p>
-                    </div>
-                  </div>
-                </MenubarItem>
-              ))}
-          </MenubarContent>
-        </MenubarMenu>
-      </Menubar>
+      <Button variant={"ghost"} className="space-x-1 font-semibold mx-2">
+        <Image src={"/coins/kinto.png"} width={30} height={30} alt="Kinto" />
+        <p>Kinto Mainnet</p>
+      </Button>
 
       <Button
         className="my-auto flex space-x-2 rounded-sm"

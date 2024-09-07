@@ -20,7 +20,7 @@ import {
 import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";
 import axios from "axios";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { usePathname, useRouter } from "next/navigation";
 import { arbitrumSepolia } from "viem/chains";
 import { BackgroundBeams } from "../ui/custom-ui/background-beams";
@@ -56,11 +56,9 @@ export default function Layout({ children }: LayoutProps) {
     params: "",
   });
   const {
-    balanceObject,
-    setBalanceObject,
-    setBalanceObjectInUSD,
+    balance,
+    balanceInUSD,
     setActionParams,
-    setTotalBalance,
     action,
     setAction,
     actionParams,
@@ -68,135 +66,6 @@ export default function Layout({ children }: LayoutProps) {
   const { openAi, setOpenAi } = useEnvironmentContext();
   const [thinking, setThinking] = useState(false);
   const [convos, setConvos] = useState<Convo[]>([]);
-
-  // TODO:
-  // useEffect(() => {
-  //   if (address == null) return;
-  //   if (balanceObject == null) {
-  //     try {
-  //       (async function () {
-  //         const tempBalanceObject: any = {};
-  //         const { formatted: arbBalance } = await getBalance(config, {
-  //           address: address,
-  //           chainId: arbitrumSepolia.id,
-  //         });
-  //         tempBalanceObject[arbitrumSepolia.id] = {};
-  //         tempBalanceObject[arbitrumSepolia.id].native = arbBalance;
-  //         const updateAllBalances = async () => {
-  //           // Define the chains you want to process
-
-  //           // Iterate over each chain
-  //           const entries = Object.entries(
-  //             supportedchains[arbitrumSepolia.id].tokens
-  //           );
-
-  //           // Iterate over each token in the chain
-  //           for (const [key, supp] of entries) {
-  //             const { formatted: tokenBalnce } = await getBalance(config, {
-  //               address: address,
-  //               chainId: arbitrumSepolia.id,
-  //               token: supp as `0x${string}`,
-  //             });
-  //             tempBalanceObject[arbitrumSepolia.id][key] = tokenBalnce;
-  //           }
-  //         };
-
-  //         // Call the async function and wait for it to complete
-  //         await updateAllBalances();
-  //         setBalanceObject(tempBalanceObject);
-  //         console.log("TEMP BALANCE OBJECT");
-  //         console.log(tempBalanceObject);
-  //         console.log(typeof tempBalanceObject[arbitrumSepolia.id].native);
-  //         console.log(typeof tempBalanceObject[arbitrumSepolia.id].usdc);
-  //         if (tempBalanceObject != null && convos.length == 0) {
-  //           console.log("BEFORE SNEDING TO AI");
-  //           console.log(JSON.stringify(tempBalanceObject));
-  //           try {
-  //             setThinking(true);
-  //             const response = await axios.post("/api/classify", {
-  //               message: JSON.stringify(tempBalanceObject),
-  //             });
-
-  //             console.log(response.data);
-  //             if (response.data.success == false)
-  //               throw Error("Error in response");
-
-  //             console.log(typeof response.data.response.response);
-  //             setConvos([
-  //               {
-  //                 id: "1",
-  //                 isAI: true,
-  //                 message: response.data.response.response,
-  //               },
-  //             ]);
-  //             console.log({
-  //               id: "1",
-  //               isAI: true,
-  //               message: response.data.response.response,
-  //             });
-  //           } catch (e) {
-  //             console.log(e);
-  //             setConvos([
-  //               ...convos,
-  //               {
-  //                 id: "1",
-  //                 isAI: true,
-  //                 message: "Please refresh the page and try again.",
-  //               },
-  //             ]);
-  //           }
-  //           setThinking(false);
-  //         }
-  //       })();
-  //     } catch (e) {
-  //       console.log("FETCH BALANCE ERROR");
-  //       console.log(e);
-  //     }
-  //   } else {
-  //     console.log("ALL BALANCES FETCHED");
-  //     console.log(balanceObject);
-  //     try {
-  //       (async function () {
-  //         const res = await fetch(
-  //           `/api/coinmarketcap/convert?from=link&to=eth`
-  //         );
-  //         const data = await res.json();
-  //         const linkUsdValue = data.amount.from;
-  //         const ethUsdValue = data.amount.to;
-
-  //         const nextRes = await fetch(
-  //           `/api/coinmarketcap/convert?from=edu&to=eth`
-  //         );
-  //         const nextData = await nextRes.json();
-  //         const eduUsdValue = nextData.amount.from;
-  //         let tempTotalValue = 0;
-  //         let tempBalanceObjectInUSD: any = {};
-  //         for (const [chainId, balances] of Object.entries(balanceObject)) {
-  //           console.log(`Network ID: ${chainId}`);
-  //           tempBalanceObjectInUSD[chainId] = {};
-  //           for (const [token, balance] of Object.entries(balances as any)) {
-  //             tempBalanceObjectInUSD[chainId][token] =
-  //               (balance as any) *
-  //               (token == "usdc" || token == "usdt" || token == "dai"
-  //                 ? 1
-  //                 : token == "link"
-  //                 ? linkUsdValue
-  //                 : chainId == arbitrumSepolia.id.toString()
-  //                 ? ethUsdValue
-  //                 : eduUsdValue);
-  //             tempTotalValue += tempBalanceObjectInUSD[chainId][token];
-  //           }
-  //         }
-  //         console.log("TEMP BALANCE OBJECT IN USD");
-  //         console.log(tempBalanceObjectInUSD);
-  //         setBalanceObjectInUSD(tempBalanceObjectInUSD);
-  //         setTotalBalance(tempTotalValue);
-  //       })();
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-  // }, [address, balanceObject]);
 
   useEffect(() => {
     if (action == "swap" && pathname != "/pool") {

@@ -8,7 +8,6 @@ import StakeTransaction from "@/components/sections/stake/transaction";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import ConnectButton from "@/components/ui/custom/connect-button";
-import { supportedchains } from "@/lib/constants";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -17,11 +16,10 @@ import { formatEther, parseEther } from "viem";
 export default function StakePage() {
   const [stakeAmount, setStakeAmount] = useState("0");
   const [stoneAmount, setStoneAmount] = useState("0");
-  const { address, balance } = useEnvironmentContext();
   const [open, setOpen] = useState(false);
-  const { action, actionParams, balanceObject } = useEnvironmentContext();
+  const { action, actionParams, balance } = useEnvironmentContext();
 
-  if (balanceObject == null) return <div></div>;
+  if (balance == null) return <div></div>;
 
   // TODO
   // const { data: sharePrice } = useReadContract({

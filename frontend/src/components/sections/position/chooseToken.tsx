@@ -33,7 +33,7 @@ export default function ChooseToken({
   txStarted: boolean;
 }) {
   const [chevron, setChevron] = useState(true);
-  const { balanceObject } = useEnvironmentContext();
+  const { balance } = useEnvironmentContext();
   return (
     <Card className="w-full pt-2  border-none ">
       <CardTitle>
@@ -112,7 +112,7 @@ export default function ChooseToken({
 
         {/* TODO: 
         <p className="text-end text-xs font-medium">
-          Balance: {balanceObject[chainId || arbitrumSepolia.id][token]}
+          Balance: {balance[chainId || arbitrumSepolia.id][token]}
         </p> */}
       </CardFooter>
     </Card>

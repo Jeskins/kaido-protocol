@@ -83,7 +83,13 @@ export type KintoSDK = {
   sendTransaction: (txs: TxCall[]) => Promise<void>;
   createNewWallet: () => Promise<void>;
 };
-
+export interface balance {
+  eth: string;
+  usdc: string;
+  weth: string;
+  usdt: string;
+  link: string;
+}
 export interface AppMetadata {
   parent: `0x${string}`;
   paymasterBalance: number;

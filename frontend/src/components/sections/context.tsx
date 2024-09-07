@@ -6,16 +6,22 @@ import React, {
   useEffect,
 } from "react";
 import { createKintoSDK } from "kinto-web-sdk";
-import { KintoSDK } from "@/lib/type";
+import { balance, KintoSDK } from "@/lib/type";
 import { createPublicClient, formatEther, http } from "viem";
 import { kinto } from "@/lib/config";
+import getAllbalance from "@/lib/helpers/getAllbalance";
 interface BalanceContextType {
+  kintoSDK: KintoSDK;
+  address: string;
+  setAddress: (address: string) => void;
+  appName: string;
+  setAppName: (appName: string) => void;
   totalBalance: number | null;
   setTotalBalance: (totalBalance: number) => void;
-  balanceObject: any;
-  setBalanceObject: (balanceObject: any) => void;
-  balanceObjectInUSD: any;
-  setBalanceObjectInUSD: (balanceObjectInUSD: any) => void;
+  balance: any;
+  setBalance: (balance: any) => void;
+  balanceInUSD: any;
+  setBalanceInUSD: (balanceInUSD: any) => void;
   openAi: boolean;
   setOpenAi: (openAi: boolean) => void;
   actionParams: string;
@@ -26,13 +32,7 @@ interface BalanceContextType {
   setOpenPositionTransactionModal: (
     openPositionTransactionModal: boolean
   ) => void;
-  kintoSDK: KintoSDK;
-  address: string;
-  setAddress: (address: string) => void;
-  appName: string;
-  setAppName: (appName: string) => void;
-  balance: string;
-  setBalance: (balance: string) => void;
+
   publicClient: any;
   setPublicClient: (publicClient: any) => void;
 }
@@ -48,19 +48,19 @@ export const useEnvironmentContext = () => {
 };
 
 export const BalanceProvider = ({ children }: { children: ReactNode }) => {
+  const appAddress = process.env.NEXT_PUBLIC_KINTO_APP_ADDRESS || "";
+  const kintoSDK = createKintoSDK(appAddress);
+  const [balance, setBalance] = useState<balance | null>(null);
+  const [balanceInUSD, setBalanceInUSD] = useState<balance | null>(null);
+
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
-  const [balanceObject, setBalanceObject] = useState<any>(null);
-  const [balanceObjectInUSD, setBalanceObjectInUSD] = useState<any>(null);
   const [openAi, setOpenAi] = useState<boolean>(false);
   const [actionParams, setActionParams] = useState<string>("");
   const [action, setAction] = useState<string>("");
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
-  const appAddress = process.env.NEXT_PUBLIC_KINTO_APP_ADDRESS || "";
-  const kintoSDK = createKintoSDK(appAddress);
   const [address, setAddress] = useState("");
   const [appName, setAppName] = useState("");
-  const [balance, setBalance] = useState("");
   const [publicClient, setPublicClient] = useState<any>(null);
 
   useEffect(() => {
@@ -70,24 +70,33 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     });
     setPublicClient(client);
   }, []);
+
   useEffect(() => {
     if (address == "" || publicClient == null) return;
     (async function () {
-      const fetchedBalance = await publicClient.getBalance({
-        address: address,
-      });
-      setBalance(formatEther(fetchedBalance));
+      await getAllbalance(
+        publicClient,
+        address,
+        setTotalBalance,
+        setBalance,
+        setBalanceInUSD
+      );
     })();
   }, [address]);
   return (
     <BalanceContext.Provider
       value={{
+        kintoSDK,
+        address,
+        setAddress,
+        appName,
+        setAppName,
         totalBalance,
         setTotalBalance,
-        balanceObject,
-        setBalanceObject,
-        balanceObjectInUSD,
-        setBalanceObjectInUSD,
+        balanceInUSD,
+        setBalanceInUSD,
+        balance,
+        setBalance,
         openAi,
         setOpenAi,
         actionParams,
@@ -96,13 +105,6 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setAction,
         openPositionTransactionModal,
         setOpenPositionTransactionModal,
-        kintoSDK,
-        address,
-        setAddress,
-        appName,
-        setAppName,
-        balance,
-        setBalance,
         publicClient,
         setPublicClient,
       }}
