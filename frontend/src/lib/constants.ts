@@ -1,4 +1,3 @@
-import { arbitrumSepolia } from "viem/chains";
 import { kinto } from "./config";
 
 export const COINMARKETCAP_IDS: Record<string, number> = {

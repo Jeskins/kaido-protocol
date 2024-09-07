@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import {
   Menubar,

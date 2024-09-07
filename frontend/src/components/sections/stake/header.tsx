@@ -7,7 +7,6 @@ import {
   MenubarItem,
   MenubarMenu,
 } from "@/components/ui/menubar";
-import { supportedchains } from "@/lib/constants";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -46,7 +45,7 @@ export default function SwitchChainHeader() {
                 )}
               </div>
             </MenubarTrigger>
-            <MenubarContent>
+            {/* <MenubarContent>
               {Object.values(supportedchains)
                 .sort((a, b) => a.id - b.id)
                 .map((coin) => (
@@ -72,7 +71,7 @@ export default function SwitchChainHeader() {
                     </div>
                   </MenubarItem>
                 ))}
-            </MenubarContent>
+            </MenubarContent> */}
           </MenubarMenu>
         </Menubar>
       </div>

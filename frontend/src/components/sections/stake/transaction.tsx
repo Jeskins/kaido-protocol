@@ -11,13 +11,11 @@ import {
 } from "@/components/ui/dialog";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { supportedchains, supportedcoins } from "@/lib/constants";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { parseEther } from "viem";
 import "@/styles/spinner.css";
 export default function StakeTransaction({
   stakeAmount,

@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "../../ui/button";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";

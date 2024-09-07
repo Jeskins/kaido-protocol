@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { erc20Abi, parseEther, zeroAddress } from "viem";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
-import { supportedchains, supportedcoins } from "@/lib/constants";
+import { supportedcoins } from "@/lib/constants";
 import { arbitrumSepolia } from "viem/chains";
 import { useEnvironmentContext } from "../context";
 
