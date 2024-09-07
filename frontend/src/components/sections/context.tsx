@@ -1,3 +1,4 @@
+"use client";
 import React, {
   createContext,
   useContext,
@@ -46,9 +47,6 @@ interface BalanceContextType {
   isOnNetwork: boolean;
   setIsOnNetwork: (isOnNetwork: boolean) => void;
   signer: Signer | null;
-  initializeXmtp: any;
-  disconnectXmtp: any;
-  isXmtpLoading: boolean;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -82,8 +80,9 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     useState<boolean>(false);
   const [address, setAddress] = useState("");
   const [publicClient, setPublicClient] = useState<PublicClient | null>(null);
-  const [walletClient, setWalletClient] = useState<WalletClient | null>(null);
   const [kycViewerInfo, setKycViewerInfo] = useState<any>(null);
+  const [isOnNetwork, setIsOnNetwork] = useState(false);
+  const [signer, setSigner] = useState<Signer | null>(null);
   useEffect(() => {
     const client = createPublicClient({
       chain: kinto,
@@ -141,42 +140,6 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // XMTP
-  const [isOnNetwork, setIsOnNetwork] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const {
-    client,
-    error,
-    isLoading,
-    initialize: initializeXmtp,
-    disconnect: disconnectXmtp,
-  } = useClient();
-  const [loading, setLoading] = useState(false);
-
-  const [selectedConversation, setSelectedConversation] = useState(null);
-  const [signer, setSigner] = useState<Signer | null>(null);
-
-  useEffect(() => {
-    const initialIsOnNetwork =
-      localStorage.getItem("isOnNetwork") === "true" || false;
-
-    setIsOnNetwork(initialIsOnNetwork);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("isOnNetwork", isOnNetwork.toString());
-    localStorage.setItem("isConnected", isConnected.toString());
-  }, [isConnected, isOnNetwork]);
-  useEffect(() => {
-    if (address != "") {
-      setIsConnected(true);
-    }
-    if (client && !isOnNetwork) {
-      setIsOnNetwork(true);
-    }
-    if (signer && isOnNetwork) {
-      initXmtpWithKeys(signer, initializeXmtp);
-    }
-  }, [address, signer, client]);
 
   return (
     <BalanceContext.Provider
@@ -209,9 +172,6 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         isOnNetwork,
         setIsOnNetwork,
         signer,
-        initializeXmtp,
-        disconnectXmtp,
-        isXmtpLoading: isLoading,
       }}
     >
       {children}

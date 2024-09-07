@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 
 import ConnectButton from "@/components/ui/custom/connect-button";
@@ -31,6 +32,8 @@ import {
 import { motion } from "framer-motion";
 import DefaultLanding from "./default-landing";
 import { Faucet } from "../ui/faucet";
+import { useClient } from "@xmtp/react-sdk";
+import { initXmtpWithKeys } from "@/lib/helpers/xmtp";
 interface Convo {
   id: string;
   isAI: boolean;
@@ -48,30 +51,33 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { address } = useEnvironmentContext();
-  const pathname = usePathname();
-  const router = useRouter();
-  const [classifyResponse, setClassifyResponse] = useState<ClassifyResponse>({
-    response: "",
-    action: "",
-    params: "",
-  });
-  const { setActionParams, action, setAction, openAi, setOpenAi } =
+  const { address, setIsOnNetwork, isOnNetwork, signer } =
     useEnvironmentContext();
+
+  const { openAi, setOpenAi } = useEnvironmentContext();
   const [convos, setConvos] = useState<Convo[]>([]);
 
+  const { client, initialize: initializeXmtp } = useClient();
+
   useEffect(() => {
-    if (action == "swap" && pathname != "/pool") {
-      // TODO: Make AI explain the page
-      router.push("/pool");
-    }
+    const initialIsOnNetwork =
+      localStorage.getItem("isOnNetwork") === "true" || false;
 
-    if (action == "stake" && pathname != "/stake") {
-      // TODO: Make AI explain the page
-      router.push("/stake");
-    }
-  }, [action]);
+    setIsOnNetwork(initialIsOnNetwork);
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem("isOnNetwork", isOnNetwork.toString());
+    localStorage.setItem("isConnected", (address != "").toString());
+  }, [address, isOnNetwork]);
+  useEffect(() => {
+    if (client && !isOnNetwork) {
+      setIsOnNetwork(true);
+    }
+    if (signer && isOnNetwork) {
+      initXmtpWithKeys(signer, initializeXmtp);
+    }
+  }, [address, signer, client]);
   return (
     <>
       {address == "" ? (

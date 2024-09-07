@@ -14,6 +14,7 @@ import { useAccount } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
 import { handleLogout, initXmtpWithKeys } from "@/lib/helpers/xmtp";
+import { useClient } from "@xmtp/react-sdk";
 
 export default function AIComponent() {
   const { address } = useAccount();
@@ -28,11 +29,13 @@ export default function AIComponent() {
     setClassifyResponse,
     isOnNetwork,
     signer,
-    initializeXmtp,
-    disconnectXmtp,
     setIsOnNetwork,
-    isXmtpLoading,
   } = useEnvironmentContext();
+  const {
+    initialize: initializeXmtp,
+    disconnect: disconnectXmtp,
+    isLoading: isXmtpLoading,
+  } = useClient();
   const { open } = useWeb3Modal();
   return (
     <div

@@ -1,4 +1,3 @@
-"use client";
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { XMTPProvider } from "@xmtp/react-sdk";
@@ -13,6 +12,7 @@ import { config } from "@/lib/config";
 import { BalanceProvider } from "@/components/sections/context";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { arbitrumSepolia } from "viem/chains";
+
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
