@@ -8,8 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEnvironmentContext } from "../sections/context";
 import Image from "next/image";
 import { encodeFunctionData } from "viem";
@@ -227,25 +225,6 @@ export function Faucet() {
               className="mx-2 rounded-full"
             />
             10 USDC
-          </Button>
-          <Button
-            variant={"outline"}
-            disabled={mintTx == "-1"}
-            onClick={async () => {
-              try {
-                const response = await kintoSDK.sendTransaction([
-                  {
-                    to: "0x1f8c3783795bd42b6f20D9392704C97635d78489",
-                    value: BigInt("1900000000000000"),
-                    data: "0x",
-                  },
-                ]);
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            Send Value
           </Button>
         </div>
       </DialogContent>

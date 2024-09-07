@@ -10,6 +10,7 @@ import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";
 import { createPublicClient, formatEther, http } from "viem";
 import { kinto } from "@/lib/config";
 import getAllbalance from "@/lib/helpers/getAllBalances";
+import { fetchAccountInfo, fetchKYCViewerInfo } from "@/lib/helpers/kinto";
 interface BalanceContextType {
   kintoSDK: KintoSDK;
   address: string;
@@ -71,6 +72,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     useState<boolean>(false);
   const [address, setAddress] = useState("");
   const [publicClient, setPublicClient] = useState<any>(null);
+  const [kycViewerInfo, setKycViewerInfo] = useState<any>(null);
   useEffect(() => {
     const client = createPublicClient({
       chain: kinto,
@@ -90,6 +92,18 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setBalanceInUSD
       );
     })();
+  }, [address]);
+
+  useEffect(() => {
+    fetchAccountInfo(kintoSDK, setAddress);
+  });
+
+  useEffect(() => {
+    if (address != "") {
+      fetchKYCViewerInfo(address, publicClient).then((res) =>
+        setKycViewerInfo(res)
+      );
+    }
   }, [address]);
   return (
     <BalanceContext.Provider

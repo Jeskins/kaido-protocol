@@ -6,10 +6,9 @@ import { useEnvironmentContext } from "./context";
 import { useState } from "react";
 import "@/styles/spinner.css";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
+import { kintoLogin } from "@/lib/helpers/kinto";
 export default function DefaultLanding() {
-  const { kintoSDK, setAddress } = useEnvironmentContext();
-  const [kintoConnecting, setKintoConnecting] = useState(false);
-  const { open } = useWeb3Modal();
+  const { kintoSDK } = useEnvironmentContext();
   return (
     <HeroHighlight className="select-none">
       <motion.h1
@@ -53,23 +52,10 @@ export default function DefaultLanding() {
         <div>
           <Button
             onClick={async () => {
-              setKintoConnecting(true);
-              try {
-                const res = await kintoSDK.connect();
-                setAddress(res.walletAddress || "0x");
-              } catch (error) {
-                console.error("Failed to fetch account info:", error);
-              }
-              setKintoConnecting(false);
+              await kintoLogin(kintoSDK);
             }}
           >
-            {kintoConnecting ? (
-              <div className="w-[150px] flex justify-center">
-                <div className="black-spinner"></div>
-              </div>
-            ) : (
-              "Connect Your Kinto Wallet"
-            )}
+            {"Connect Your Kinto Wallet"}
           </Button>
           <p className="text-xs font-medium text-stone-400 mt-1 cursor-pointer">
             Don't have an account? &nbsp;
