@@ -1,5 +1,3 @@
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
-import { injected } from "wagmi/connectors";
 import { arbitrumSepolia } from "viem/chains";
 import { Button } from "./button";
 import { Icons } from "./icons";
@@ -15,16 +13,14 @@ import { supportedchains } from "@/lib/constants";
 import { ArrowLeftCircleIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useEnvironmentContext } from "../sections/context";
 
 export default function ConnectButton() {
-  const { address, status, chainId } = useAccount();
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
-  const { switchChainAsync } = useSwitchChain();
+  const { address } = useEnvironmentContext();
   const [chainChevron, setChainChevron] = useState(false);
   const pathname = usePathname();
 
-  return status == "connected" ? (
+  return address != "" ? (
     <>
       <Menubar
         onClick={() => {
@@ -40,27 +36,16 @@ export default function ConnectButton() {
             }}
           >
             <div className="flex space-x-2 items-center w-full justify-between">
-              {chainId != arbitrumSepolia.id ? (
-                <div className="flex space-x-2">
-                  <p>❌</p>
-                  <p>Wrong Network</p>
-                </div>
-              ) : (
-                <div className="flex space-x-2">
-                  <Image
-                    src={
-                      supportedchains[(chainId || 11155111).toString()].image
-                    }
-                    width={20}
-                    height={20}
-                    alt=""
-                    className="rounded-full"
-                  />
-                  <p>
-                    {supportedchains[(chainId || 11155111).toString()].name}
-                  </p>
-                </div>
-              )}
+              <div className="flex space-x-2">
+                <Image
+                  src={"/coins/kinto.png"}
+                  width={20}
+                  height={20}
+                  alt=""
+                  className="rounded-full"
+                />
+                <p>Kinto Mainnet</p>
+              </div>
 
               {!chainChevron ? (
                 <ChevronUp size={20} />
@@ -77,14 +62,14 @@ export default function ConnectButton() {
                   key={chain.id}
                   className=" cursor-pointer w-full"
                   onClick={async () => {
-                    try {
-                      await switchChainAsync({
-                        chainId: chain.chainId,
-                      });
-                      setChainChevron(true);
-                    } catch (e) {
-                      console.log(e);
-                    }
+                    // try {
+                    //   await switchChainAsync({
+                    //     chainId: chain.chainId,
+                    //   });
+                    //   setChainChevron(true);
+                    // } catch (e) {
+                    //   console.log(e);
+                    // }
                   }}
                 >
                   <div className="flex space-x-2 items-center w-full justify-between">
@@ -108,7 +93,7 @@ export default function ConnectButton() {
       <Button
         className="my-auto flex space-x-2 rounded-sm"
         onClick={() => {
-          disconnect();
+          // disconnect();
         }}
       >
         <Image
@@ -125,11 +110,11 @@ export default function ConnectButton() {
     <Button
       className="my-auto"
       onClick={() => {
-        console.log("connect");
-        connect({
-          chainId: arbitrumSepolia.id,
-          connector: injected(),
-        });
+        // console.log("connect");
+        // connect({
+        //   chainId: arbitrumSepolia.id,
+        //   connector: injected(),
+        // });
       }}
     >
       Connect Wallet

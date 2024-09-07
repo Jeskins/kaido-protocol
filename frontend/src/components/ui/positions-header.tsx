@@ -5,12 +5,9 @@ import Link from "next/link";
 import { Button, buttonVariants } from "./button";
 import { Plus } from "lucide-react";
 import { useEnvironmentContext } from "../sections/context";
-import { useAccount, useSwitchChain } from "wagmi";
 import { CreatePositionDialog } from "../sections/position/create-position-dialog";
 
 export default function PositionsHeader() {
-  const { chainId } = useAccount();
-  const { switchChainAsync } = useSwitchChain();
   const [checked, setChecked] = useState(false);
   const [open, setOpen] = useState(false);
   const [tokenA, setTokenA] = useState<string>("link");
@@ -29,14 +26,6 @@ export default function PositionsHeader() {
         const c = p[0];
         const tA = p[1].toLocaleLowerCase();
         const tB = p[2].toLocaleLowerCase();
-        if (c != chainId?.toString()) {
-          await switchChainAsync({
-            chainId: parseInt(c),
-          });
-          setTokenA(tA);
-          setTokenB(tB);
-          setOpen(true);
-        }
       }
     })();
   }, [actionParams]);

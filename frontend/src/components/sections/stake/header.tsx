@@ -11,11 +11,8 @@ import { supportedchains } from "@/lib/constants";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useAccount, useSwitchChain } from "wagmi";
 
 export default function SwitchChainHeader() {
-  const { chainId } = useAccount();
-  const { switchChainAsync } = useSwitchChain();
   const [chainChevron, setChainChevron] = useState(false);
   return (
     <CardTitle>
@@ -35,13 +32,13 @@ export default function SwitchChainHeader() {
             >
               <div className="flex space-x-2 items-center ">
                 <Image
-                  src={supportedchains[(chainId || 11155111).toString()].image}
+                  src={"/coins/kinto.png"}
                   width={20}
                   height={20}
                   alt=""
                   className="rounded-full"
                 />
-                <p>{supportedchains[(chainId || 11155111).toString()].name}</p>
+                <p>Kinto Mainnet</p>
                 {!chainChevron ? (
                   <ChevronUp size={20} />
                 ) : (
@@ -57,10 +54,10 @@ export default function SwitchChainHeader() {
                     disabled={coin.stakeDisabled}
                     className=" cursor-pointer w-full"
                     onClick={async () => {
-                      await switchChainAsync({
-                        chainId: coin.chainId,
-                      });
-                      setChainChevron(true);
+                      // await switchChainAsync({
+                      //   chainId: coin.chainId,
+                      // });
+                      // setChainChevron(true);
                     }}
                   >
                     <div className="flex space-x-2">
