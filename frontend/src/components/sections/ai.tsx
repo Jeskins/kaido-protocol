@@ -83,7 +83,7 @@ export default function AIComponent() {
           >
             Log out
           </Button>
-          <ScrollArea className="h-[80%] flex flex-col space-y-2 no-scrollbar">
+          <ScrollArea className="h-[80%] flex flex-col space-y-2 no-scrollbar -translate-y-2">
             {convos.map((convo) => (
               <div
                 key={convo.id}
@@ -92,10 +92,12 @@ export default function AIComponent() {
                 } items-center space-x-2 my-1`}
               >
                 {convo.isAI && (
-                  <Avatar className="h-5 w-9">
-                    <AvatarImage src={"/logo.png"} alt="Avatar" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
+                  <Image
+                    src={"/logo-square.png"}
+                    width={25}
+                    height={25}
+                    alt="logo"
+                  />
                 )}
                 <Card className="max-w-[70%]">
                   <CardContent className="py-2 px-3">
@@ -117,10 +119,12 @@ export default function AIComponent() {
                 key={convos.length}
                 className={`flex text-sm justify-start items-center space-x-2`}
               >
-                <Avatar className="h-9 w-9">
-                  <AvatarImage src={"/logo.png"} alt="Avatar" className="" />
-                  <AvatarFallback>OM</AvatarFallback>
-                </Avatar>
+                <Image
+                  src={"/logo-square.png"}
+                  width={25}
+                  height={25}
+                  alt="logo"
+                />
                 <Card className="max-w-[70%]">
                   <CardContent className="py-3">
                     <LoadingDots />
