@@ -5,9 +5,11 @@ import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";
 import { useState } from "react";
 import "@/styles/spinner.css";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 export default function DefaultLanding() {
   const { kintoSDK, setAddress, setAppName } = useEnvironmentContext();
   const [kintoConnecting, setKintoConnecting] = useState(false);
+  const { open } = useWeb3Modal();
   return (
     <HeroHighlight className="select-none">
       <motion.h1

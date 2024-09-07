@@ -11,9 +11,8 @@ import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/lib/config";
 import { BalanceProvider } from "@/components/sections/context";
-import Head from "next/head";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
-import { siweConfig } from "@/lib/one-click-auth-config";
+import { arbitrumSepolia } from "viem/chains";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -23,7 +22,7 @@ const queryClient = new QueryClient();
 createWeb3Modal({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID || "",
   wagmiConfig: config,
-  siweConfig,
+  defaultChain: arbitrumSepolia,
 });
 
 export default function RootLayout({

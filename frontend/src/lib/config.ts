@@ -41,4 +41,10 @@ export const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
+  auth: {
+    email: true, // default to true
+    socials: [],
+    showWallets: false, // default to true
+    walletFeatures: false, // default to true
+  },
 });
