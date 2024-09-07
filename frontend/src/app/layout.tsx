@@ -1,7 +1,7 @@
 "use client";
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
-
+import { XMTPProvider } from "@xmtp/react-sdk";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -33,28 +33,30 @@ export default function RootLayout({
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <html lang="en" suppressHydrationWarning>
-          <body
-            className={cn(
-              "h-screen bg-background font-sans antialiased",
-              fontSans.variable
-            )}
-          >
-            <ThemeProvider
-              attribute="class"
-              disableTransitionOnChange
-              defaultTheme="dark"
+        <XMTPProvider>
+          <html lang="en" suppressHydrationWarning>
+            <body
+              className={cn(
+                "h-screen bg-background font-sans antialiased",
+                fontSans.variable
+              )}
             >
-              <BalanceProvider>
-                <Layout>
-                  <Toaster />
-                  <ThemeSwitcher />
-                  {children}
-                </Layout>
-              </BalanceProvider>
-            </ThemeProvider>
-          </body>
-        </html>
+              <ThemeProvider
+                attribute="class"
+                disableTransitionOnChange
+                defaultTheme="dark"
+              >
+                <BalanceProvider>
+                  <Layout>
+                    <Toaster />
+                    <ThemeSwitcher />
+                    {children}
+                  </Layout>
+                </BalanceProvider>
+              </ThemeProvider>
+            </body>
+          </html>
+        </XMTPProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

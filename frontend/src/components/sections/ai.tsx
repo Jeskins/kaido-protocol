@@ -13,6 +13,7 @@ import { useEnvironmentContext } from "./context";
 import { useAccount } from "wagmi";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Image from "next/image";
+import { handleLogout, initXmtpWithKeys } from "@/lib/helpers/xmtp";
 
 export default function AIComponent() {
   const { address } = useAccount();
@@ -25,12 +26,20 @@ export default function AIComponent() {
     setAction,
     setActionParams,
     setClassifyResponse,
+    isOnNetwork,
+    signer,
+    initializeXmtp,
+    disconnectXmtp,
+    setIsOnNetwork,
+    isXmtpLoading,
   } = useEnvironmentContext();
   const { open } = useWeb3Modal();
   return (
     <div
       className={`h-screen my-auto pt-6 flex flex-col bg-background ${
-        address == undefined ? "justify-center" : "justify-start"
+        address == undefined || !isOnNetwork
+          ? "justify-center"
+          : "justify-start"
       }`}
     >
       {address == undefined ? (
@@ -39,7 +48,25 @@ export default function AIComponent() {
             open();
           }}
         >
-          Connect with XMTP
+          Connect Wallet
+        </Button>
+      ) : !isOnNetwork ? (
+        <Button
+          disabled={isXmtpLoading}
+          onClick={() => {
+            console.log("WHAT");
+            if (signer == null) return;
+            initXmtpWithKeys(signer, initializeXmtp);
+          }}
+        >
+          {isXmtpLoading ? (
+            <div className="black-spinner"></div>
+          ) : (
+            <>
+              <Image src="/xmtp.png" width={25} height={25} alt="xmtp" />
+              <p>Connect with XMTP</p>{" "}
+            </>
+          )}
         </Button>
       ) : (
         <>
@@ -47,7 +74,15 @@ export default function AIComponent() {
             <Image src="/xmtp.png" width={25} height={25} alt="xmtp" />
             <p>{address.slice(0, 8) + "...." + address.slice(-6)}</p>
           </div>
-
+          <Button
+            variant={"ghost"}
+            className="hover:bg-transparent -translate-y-8"
+            onClick={() => {
+              handleLogout(signer, setIsOnNetwork, disconnectXmtp);
+            }}
+          >
+            Log out
+          </Button>
           <ScrollArea className="h-[80%] flex flex-col space-y-2 no-scrollbar">
             {convos.map((convo) => (
               <div

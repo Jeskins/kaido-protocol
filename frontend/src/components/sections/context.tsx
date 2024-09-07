@@ -5,12 +5,16 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { useClient } from "@xmtp/react-sdk";
+import { ethers, Signer } from "ethers";
 import { createKintoSDK } from "kinto-web-sdk";
 import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";
-import { createPublicClient, formatEther, http } from "viem";
+import { createPublicClient, http, PublicClient, WalletClient } from "viem";
 import { kinto } from "@/lib/config";
 import getAllbalance from "@/lib/helpers/getAllBalances";
 import { fetchAccountInfo, fetchKYCViewerInfo } from "@/lib/helpers/kinto";
+import { initXmtpWithKeys } from "@/lib/helpers/xmtp";
+
 interface BalanceContextType {
   kintoSDK: KintoSDK;
   address: string;
@@ -39,6 +43,12 @@ interface BalanceContextType {
   setConvos: (convos: Convo[]) => void;
   classifyResponse: ClassifyResponse;
   setClassifyResponse: (classifyResponse: ClassifyResponse) => void;
+  isOnNetwork: boolean;
+  setIsOnNetwork: (isOnNetwork: boolean) => void;
+  signer: Signer | null;
+  initializeXmtp: any;
+  disconnectXmtp: any;
+  isXmtpLoading: boolean;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -71,7 +81,8 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
   const [address, setAddress] = useState("");
-  const [publicClient, setPublicClient] = useState<any>(null);
+  const [publicClient, setPublicClient] = useState<PublicClient | null>(null);
+  const [walletClient, setWalletClient] = useState<WalletClient | null>(null);
   const [kycViewerInfo, setKycViewerInfo] = useState<any>(null);
   useEffect(() => {
     const client = createPublicClient({
@@ -92,6 +103,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setBalanceInUSD
       );
     })();
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+    setSigner(provider.getSigner());
   }, [address]);
 
   useEffect(() => {
@@ -99,12 +114,12 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (address != "") {
+    if (address != "" && publicClient != null) {
       fetchKYCViewerInfo(address, publicClient).then((res) =>
         setKycViewerInfo(res)
       );
     }
-  }, [address]);
+  }, [address, publicClient]);
 
   useEffect(() => {
     const observer = new MutationObserver((mutations) => {
@@ -124,6 +139,44 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
       observer.disconnect();
     };
   }, []);
+
+  // XMTP
+  const [isOnNetwork, setIsOnNetwork] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const {
+    client,
+    error,
+    isLoading,
+    initialize: initializeXmtp,
+    disconnect: disconnectXmtp,
+  } = useClient();
+  const [loading, setLoading] = useState(false);
+
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [signer, setSigner] = useState<Signer | null>(null);
+
+  useEffect(() => {
+    const initialIsOnNetwork =
+      localStorage.getItem("isOnNetwork") === "true" || false;
+
+    setIsOnNetwork(initialIsOnNetwork);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("isOnNetwork", isOnNetwork.toString());
+    localStorage.setItem("isConnected", isConnected.toString());
+  }, [isConnected, isOnNetwork]);
+  useEffect(() => {
+    if (address != "") {
+      setIsConnected(true);
+    }
+    if (client && !isOnNetwork) {
+      setIsOnNetwork(true);
+    }
+    if (signer && isOnNetwork) {
+      initXmtpWithKeys(signer, initializeXmtp);
+    }
+  }, [address, signer, client]);
 
   return (
     <BalanceContext.Provider
@@ -153,6 +206,12 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setConvos,
         openFaucet,
         setOpenFaucet,
+        isOnNetwork,
+        setIsOnNetwork,
+        signer,
+        initializeXmtp,
+        disconnectXmtp,
+        isXmtpLoading: isLoading,
       }}
     >
       {children}
