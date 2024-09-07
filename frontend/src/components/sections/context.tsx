@@ -1,6 +1,14 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { createKintoSDK } from "kinto-web-sdk";
 import { KintoSDK } from "@/lib/type";
+import { createPublicClient, formatEther, http } from "viem";
+import { kinto } from "@/lib/config";
 interface BalanceContextType {
   totalBalance: number | null;
   setTotalBalance: (totalBalance: number) => void;
@@ -23,6 +31,10 @@ interface BalanceContextType {
   setAddress: (address: string) => void;
   appName: string;
   setAppName: (appName: string) => void;
+  balance: string;
+  setBalance: (balance: string) => void;
+  publicClient: any;
+  setPublicClient: (publicClient: any) => void;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -48,6 +60,25 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const kintoSDK = createKintoSDK(appAddress);
   const [address, setAddress] = useState("");
   const [appName, setAppName] = useState("");
+  const [balance, setBalance] = useState("");
+  const [publicClient, setPublicClient] = useState<any>(null);
+
+  useEffect(() => {
+    const client = createPublicClient({
+      chain: kinto,
+      transport: http(),
+    });
+    setPublicClient(client);
+  }, []);
+  useEffect(() => {
+    if (address == "" || publicClient == null) return;
+    (async function () {
+      const fetchedBalance = await publicClient.getBalance({
+        address: address,
+      });
+      setBalance(formatEther(fetchedBalance));
+    })();
+  }, [address]);
   return (
     <BalanceContext.Provider
       value={{
@@ -70,6 +101,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setAddress,
         appName,
         setAppName,
+        balance,
+        setBalance,
+        publicClient,
+        setPublicClient,
       }}
     >
       {children}

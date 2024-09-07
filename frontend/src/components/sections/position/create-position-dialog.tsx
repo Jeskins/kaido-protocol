@@ -3,21 +3,17 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import ChooseToken from "./chooseToken";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { useAccount, useWriteContract } from "wagmi";
 import { erc20Abi, parseEther, zeroAddress } from "viem";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
 import { supportedchains, supportedcoins } from "@/lib/constants";
 import { arbitrumSepolia } from "viem/chains";
-import { config } from "@/lib/config";
-import { waitForTransactionReceipt } from "@wagmi/core";
 import { useEnvironmentContext } from "../context";
 
 export function CreatePositionDialog({
@@ -48,36 +44,36 @@ export function CreatePositionDialog({
   const [approveBTx, setApproveBTx] = useState("");
   const [actionTx, setActionTx] = useState("");
   const { toast } = useToast();
-  const { chainId, address } = useAccount();
-  const { writeContractAsync } = useWriteContract();
+  const { address } = useEnvironmentContext();
   const [txStarted, setTxStarted] = useState(0);
   const [pool, setPool] = useState(zeroAddress);
   const [firstIsTokenA, setFirstIsTokenA] = useState(true);
   const { setOpenAi } = useEnvironmentContext();
-  useEffect(() => {
-    let tempPool;
-    if (
-      supportedchains[chainId || arbitrumSepolia.id].pools[
-        ((tokenA as string) + tokenB) as string
-      ] == undefined
-    ) {
-      setFirstIsTokenA(true);
-      tempPool =
-        supportedchains[chainId || arbitrumSepolia.id].pools[
-          ((tokenB as string) + tokenA) as string
-        ];
-    } else {
-      setFirstIsTokenA(false);
-      tempPool =
-        supportedchains[chainId || arbitrumSepolia.id].pools[
-          ((tokenA as string) + tokenB) as string
-        ];
-    }
+  // TODO
+  // useEffect(() => {
+  //   let tempPool;
+  //   if (
+  //     supportedchains[chainId || arbitrumSepolia.id].pools[
+  //       ((tokenA as string) + tokenB) as string
+  //     ] == undefined
+  //   ) {
+  //     setFirstIsTokenA(true);
+  //     tempPool =
+  //       supportedchains[chainId || arbitrumSepolia.id].pools[
+  //         ((tokenB as string) + tokenA) as string
+  //       ];
+  //   } else {
+  //     setFirstIsTokenA(false);
+  //     tempPool =
+  //       supportedchains[chainId || arbitrumSepolia.id].pools[
+  //         ((tokenA as string) + tokenB) as string
+  //       ];
+  //   }
 
-    console.log("tempPool");
-    console.log(tempPool);
-    setPool(tempPool);
-  }, [tokenA, tokenB]);
+  //   console.log("tempPool");
+  //   console.log(tempPool);
+  //   setPool(tempPool);
+  // }, [tokenA, tokenB]);
   useEffect(() => {
     if (approveATx != "") {
       toast({
@@ -88,10 +84,11 @@ export function CreatePositionDialog({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || arbitrumSepolia.id).toString()]
+                // TODO:
+                ` supportedchains[(chainId || arbitrumSepolia.id).toString()]
                   .explorer +
                 "tx/" +
-                approveATx
+                approveATx`
               }
             >
               View
@@ -112,10 +109,11 @@ export function CreatePositionDialog({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || arbitrumSepolia.id).toString()]
+                // TODO
+                `supportedchains[(chainId || arbitrumSepolia.id).toString()]
                   .explorer +
                 "tx/" +
-                approveBTx
+                approveBTx`
               }
             >
               View
@@ -136,10 +134,11 @@ export function CreatePositionDialog({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || arbitrumSepolia.id).toString()]
+                // TODO
+                ` supportedchains[(chainId || arbitrumSepolia.id).toString()]
                   .explorer +
                 "tx/" +
-                actionTx
+                actionTx`
               }
             >
               View
@@ -203,32 +202,33 @@ export function CreatePositionDialog({
             className="w-full my-0"
             disabled={txStarted != 0}
             onClick={async () => {
-              setTxStarted(1);
-              try {
-                const tx = await writeContractAsync({
-                  address:
-                    supportedchains[chainId || arbitrumSepolia.id].tokens[
-                      tokenA
-                    ],
-                  abi: erc20Abi,
-                  functionName: "approve",
-                  args: [
-                    pool,
-                    BigInt(parseEther(tokenAmountA)) /
-                      (tokenA == "usdc"
-                        ? BigInt("1000000000000")
-                        : BigInt("1")),
-                  ],
-                });
-                const txReceipt = await waitForTransactionReceipt(config, {
-                  hash: tx,
-                });
-                setApproveATx(tx);
-                setCompletedTxs(completedTxs + 1);
-              } catch (e) {
-                setTxStarted(0);
-                setCompletedTxs(0);
-              }
+              // TODO
+              // setTxStarted(1);
+              // try {
+              //   const tx = await writeContractAsync({
+              //     address:
+              //       supportedchains[chainId || arbitrumSepolia.id].tokens[
+              //         tokenA
+              //       ],
+              //     abi: erc20Abi,
+              //     functionName: "approve",
+              //     args: [
+              //       pool,
+              //       BigInt(parseEther(tokenAmountA)) /
+              //         (tokenA == "usdc"
+              //           ? BigInt("1000000000000")
+              //           : BigInt("1")),
+              //     ],
+              //   });
+              //   const txReceipt = await waitForTransactionReceipt(config, {
+              //     hash: tx,
+              //   });
+              //   setApproveATx(tx);
+              //   setCompletedTxs(completedTxs + 1);
+              // } catch (e) {
+              //   setTxStarted(0);
+              //   setCompletedTxs(0);
+              // }
             }}
           >
             {txStarted == 1 && completedTxs == 0 ? (
@@ -239,34 +239,33 @@ export function CreatePositionDialog({
           </Button>
           <Button
             onClick={async () => {
-              setTxStarted(2);
-              try {
-                const tx = await writeContractAsync({
-                  address:
-                    supportedchains[chainId || arbitrumSepolia.id].tokens[
-                      tokenB
-                    ],
-                  abi: erc20Abi,
-                  functionName: "approve",
-                  args: [
-                    pool,
-                    BigInt(parseEther(tokenAmountB)) /
-                      (tokenB == "usdc"
-                        ? BigInt("1000000000000")
-                        : BigInt("1")),
-                  ],
-                });
-
-                const txReceipt = await waitForTransactionReceipt(config, {
-                  hash: tx,
-                });
-
-                setApproveBTx(tx);
-                setCompletedTxs(completedTxs + 1);
-              } catch (e) {
-                setTxStarted(0);
-                setCompletedTxs(0);
-              }
+              // TODO:
+              // setTxStarted(2);
+              // try {
+              //   const tx = await writeContractAsync({
+              //     address:
+              //       supportedchains[chainId || arbitrumSepolia.id].tokens[
+              //         tokenB
+              //       ],
+              //     abi: erc20Abi,
+              //     functionName: "approve",
+              //     args: [
+              //       pool,
+              //       BigInt(parseEther(tokenAmountB)) /
+              //         (tokenB == "usdc"
+              //           ? BigInt("1000000000000")
+              //           : BigInt("1")),
+              //     ],
+              //   });
+              //   const txReceipt = await waitForTransactionReceipt(config, {
+              //     hash: tx,
+              //   });
+              //   setApproveBTx(tx);
+              //   setCompletedTxs(completedTxs + 1);
+              // } catch (e) {
+              //   setTxStarted(0);
+              //   setCompletedTxs(0);
+              // }
             }}
             variant="outline"
             className="w-full  my-0"

@@ -1,6 +1,5 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import TokenBalanceCard from "@/components/sections/home/token-balance-card";
 import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
@@ -9,7 +8,7 @@ import "@/styles/spinner.css";
 import { arbitrumSepolia } from "viem/chains";
 
 export default function HomePage() {
-  const { status, address } = useAccount();
+  const { address } = useEnvironmentContext();
   const { totalBalance, balanceObject, balanceObjectInUSD } =
     useEnvironmentContext();
 

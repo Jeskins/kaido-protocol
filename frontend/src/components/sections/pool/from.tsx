@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import { arbitrumSepolia } from "viem/chains";
 export default function From({
@@ -30,7 +29,6 @@ export default function From({
   setFromToken: (fromToken: string) => void;
   isTestnet: boolean;
 }) {
-  const { chainId } = useAccount();
   const [chevron, setChevron] = useState(true);
   return (
     <Card className="w-full pt-2  border-none ">

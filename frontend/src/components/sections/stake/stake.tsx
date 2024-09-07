@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import Image from "next/image";
-import { useAccount, useBalance } from "wagmi";
 
 export default function Stake({
   stakeAmount,

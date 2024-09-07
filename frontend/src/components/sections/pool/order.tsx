@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import From from "./from";
 import To from "./to";
-import { useAccount } from "wagmi";
 import Spinner from "@/components/ui/loading";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -36,13 +35,6 @@ export default function Order({
   triggerAction,
   isTestnet,
 }: OrderProps) {
-  const { chainId } = useAccount();
-  if (chainId == undefined)
-    return (
-      <div className="w-[75%] flex flex-col justify-center items-center ">
-        <Spinner />
-      </div>
-    );
   return (
     <Card className="border-none w-[490px] ">
       <CardContent className="">

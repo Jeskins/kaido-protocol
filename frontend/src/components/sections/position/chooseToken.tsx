@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import { arbitrumSepolia } from "viem/chains";
 import { useEnvironmentContext } from "../context";
@@ -33,7 +32,6 @@ export default function ChooseToken({
   setToken: (fromToken: string) => void;
   txStarted: boolean;
 }) {
-  const { chainId } = useAccount();
   const [chevron, setChevron] = useState(true);
   const { balanceObject } = useEnvironmentContext();
   return (
@@ -112,9 +110,10 @@ export default function ChooseToken({
       <CardFooter className="pb-4 px-2 flex justify-between text-muted-foreground">
         <p className="text-xs ">{supportedcoins[token].name}</p>
 
+        {/* TODO: 
         <p className="text-end text-xs font-medium">
           Balance: {balanceObject[chainId || arbitrumSepolia.id][token]}
-        </p>
+        </p> */}
       </CardFooter>
     </Card>
   );

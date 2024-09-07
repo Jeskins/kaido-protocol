@@ -18,9 +18,6 @@ import axios from "axios";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { use, useEffect, useState } from "react";
-import { useAccount, useBalance, useSwitchChain } from "wagmi";
-import { readContract } from "@wagmi/core";
-import { config } from "@/lib/config";
 import { erc20Abi, formatEther } from "viem";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
@@ -32,8 +29,7 @@ interface ClassifyResponse {
 }
 
 export default function PoolPage() {
-  const { status, address, chainId } = useAccount();
-  const { switchChainAsync, switchChain } = useSwitchChain();
+  const { address, balance } = useEnvironmentContext();
   const [selectedAction, setSelectedAction] = useState(false);
   const [fromAmount, setFromAmount] = useState("0");
   const [fromToken, setFromToken] = useState("usdc");
@@ -48,9 +44,6 @@ export default function PoolPage() {
   const [slippage, setSlippage] = useState("0.1");
   const [sellingPrice, setSellingPrice] = useState("0");
 
-  const { data: nativeBalance } = useBalance({
-    address,
-  });
   const [chainChevron, setChainChevron] = useState(true);
   const { action, actionParams } = useEnvironmentContext();
   const { balanceObject } = useEnvironmentContext();
@@ -144,24 +137,11 @@ export default function PoolPage() {
       setSlippage(p[3]);
       setFromAmount(p[4]);
       const c = parseInt(p[0]);
-      if (c != chainId) {
-        switchChain({ chainId: c });
-      }
+
       setAiTriggered(!aiTriggered);
     }
   }, [actionParams]);
 
-  if (chainId == 97)
-    return (
-      <div className="flex flex-col space-y-4 justify-center items-center my-auto">
-        <p className="text-lg font-semibold">
-          Please switch your chain to <span className="text-primary">Swap</span>
-        </p>
-        <div className="flex flex-col items-center">
-          <ConnectButton />
-        </div>
-      </div>
-    );
   return (
     <div className="flex justify-center items-center h-full">
       <Card className="border w-[500px] pt-2">
@@ -193,68 +173,8 @@ export default function PoolPage() {
                 Limit
               </Button>
             </div>
-            <Menubar
-              onClick={() => {
-                setChainChevron(!chainChevron);
-              }}
-              className="border-none text-sm"
-            >
-              <MenubarMenu>
-                <MenubarTrigger
-                  onClick={() => {
-                    setChainChevron(!chainChevron);
-                  }}
-                >
-                  <div className="flex space-x-2 items-center ">
-                    <Image
-                      src={
-                        supportedchains[(chainId || 11155111).toString()].image
-                      }
-                      width={20}
-                      height={20}
-                      alt=""
-                      className="rounded-full"
-                    />
-                    <p>
-                      {supportedchains[(chainId || 11155111).toString()].name}
-                    </p>
-                    {!chainChevron ? (
-                      <ChevronUp size={20} />
-                    ) : (
-                      <ChevronDown size={20} />
-                    )}
-                  </div>
-                </MenubarTrigger>
-                <MenubarContent>
-                  {Object.values(supportedchains)
-                    .sort((a, b) => a.id - b.id)
-                    .map((coin) => (
-                      <MenubarItem
-                        key={coin.name}
-                        disabled={coin.poolDisabled}
-                        className=" cursor-pointer w-full"
-                        onClick={async () => {
-                          await switchChainAsync({
-                            chainId: coin.chainId,
-                          });
-                          setChainChevron(true);
-                        }}
-                      >
-                        <div className="flex space-x-2">
-                          <Image
-                            src={coin.image}
-                            width={20}
-                            height={20}
-                            alt=""
-                            className="rounded-full"
-                          />
-                          <p>{coin.name}</p>
-                        </div>
-                      </MenubarItem>
-                    ))}
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
+
+            <p>Kinto Mainnet</p>
           </div>
         </CardTitle>
         {selectedAction ? (
@@ -273,8 +193,7 @@ export default function PoolPage() {
               triggerAction: () => {
                 setOpenTransaction(true);
               },
-              isTestnet:
-                supportedchains[(chainId || 11155111).toString()].isTestnet,
+              isTestnet: false,
             }}
           />
         ) : (
@@ -295,8 +214,7 @@ export default function PoolPage() {
                 setOpenTransaction(true);
               },
               openTransaction,
-              isTestnet:
-                supportedchains[(chainId || 11155111).toString()].isTestnet,
+              isTestnet: false,
             }}
           />
         )}

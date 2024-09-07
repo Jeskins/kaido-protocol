@@ -16,11 +16,9 @@ import {
   Notebook,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAccount, useSwitchChain } from "wagmi";
 
 export default function Page() {
-  const { address, status, chainId } = useAccount();
-  const { switchChain } = useSwitchChain();
+  const { address } = useEnvironmentContext();
   const [positions, setPositions] = useState<Position[] | null>([]);
   const [actions, setActions] = useState<Action[] | null>([]);
   const [totalDeposited, setTotalDeposited] = useState<string | null>("0");

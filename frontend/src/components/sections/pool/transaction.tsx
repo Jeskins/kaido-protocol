@@ -15,11 +15,9 @@ import { use, useEffect, useState } from "react";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
-import { useAccount, useWriteContract } from "wagmi";
 import { erc20Abi, parseEther, zeroAddress } from "viem";
-import { waitForTransactionReceipt } from "@wagmi/core";
-import { config } from "@/lib/config";
 import { arbitrumSepolia } from "viem/chains";
+import { useEnvironmentContext } from "../context";
 export default function Transaction({
   open,
   setOpen,
@@ -41,39 +39,38 @@ export default function Transaction({
   const [approveTx, setApproveTx] = useState("");
   const [actionTx, setActionTx] = useState("");
   const { toast } = useToast();
-  const { chainId, address } = useAccount();
-  const { writeContractAsync } = useWriteContract();
+  const { address } = useEnvironmentContext();
   const [txStarted, setTxStarted] = useState(0);
   const [pool, setPool] = useState(zeroAddress);
   const [fromIsTokenA, setFromIsTokenA] = useState(true);
-  useEffect(() => {
-    console.log("FROM AMOUNT");
-    console.log(fromAmount);
-    console.log("TO AMOUNT");
-    console.log(toAmount);
-    let tempPool;
-    if (
-      supportedchains[chainId || arbitrumSepolia.id].pools[
-        ((fromToken as string) + toToken) as string
-      ] == undefined
-    ) {
-      setFromIsTokenA(true);
-      tempPool =
-        supportedchains[chainId || arbitrumSepolia.id].pools[
-          ((toToken as string) + fromToken) as string
-        ];
-    } else {
-      setFromIsTokenA(false);
-      tempPool =
-        supportedchains[chainId || arbitrumSepolia.id].pools[
-          ((fromToken as string) + toToken) as string
-        ];
-    }
+  // useEffect(() => {
+  //   console.log("FROM AMOUNT");
+  //   console.log(fromAmount);
+  //   console.log("TO AMOUNT");
+  //   console.log(toAmount);
+  //   let tempPool;
+  //   if (
+  //     supportedchains[chainId || arbitrumSepolia.id].pools[
+  //       ((fromToken as string) + toToken) as string
+  //     ] == undefined
+  //   ) {
+  //     setFromIsTokenA(true);
+  //     tempPool =
+  //       supportedchains[chainId || arbitrumSepolia.id].pools[
+  //         ((toToken as string) + fromToken) as string
+  //       ];
+  //   } else {
+  //     setFromIsTokenA(false);
+  //     tempPool =
+  //       supportedchains[chainId || arbitrumSepolia.id].pools[
+  //         ((fromToken as string) + toToken) as string
+  //       ];
+  //   }
 
-    console.log("tempPool");
-    console.log(tempPool);
-    setPool(tempPool);
-  }, [fromToken, toToken, chainId]);
+  //   console.log("tempPool");
+  //   console.log(tempPool);
+  //   setPool(tempPool);
+  // }, [fromToken, toToken, chainId]);
   useEffect(() => {
     if (approveTx != "") {
       toast({
@@ -84,9 +81,10 @@ export default function Transaction({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || 11155111).toString()].explorer +
+                `supportedchains[(chainId || 11155111).toString()].explorer +
                 "tx/" +
-                approveTx
+                approveTx`
+                // TODO
               }
             >
               View
@@ -107,9 +105,10 @@ export default function Transaction({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || 11155111).toString()].explorer +
+                // TODO
+                ` supportedchains[(chainId || 11155111).toString()].explorer +
                 "tx/" +
-                actionTx
+                actionTx`
               }
             >
               View
@@ -172,36 +171,37 @@ export default function Transaction({
           <Button
             disabled={completedTxs > 0 || (txStarted == 1 && completedTxs == 0)}
             onClick={async () => {
-              setTxStarted(1);
-              console.log("Approving");
-              console.log(
-                supportedchains[chainId || arbitrumSepolia.id].tokens[fromToken]
-              );
-              try {
-                const tx = await writeContractAsync({
-                  abi: erc20Abi,
-                  address:
-                    supportedchains[chainId || arbitrumSepolia.id].tokens[
-                      fromToken
-                    ],
-                  functionName: "approve",
-                  args: [
-                    pool,
-                    BigInt(parseEther(fromAmount)) /
-                      (fromToken == "usdc"
-                        ? BigInt("1000000000000")
-                        : BigInt("1")),
-                  ],
-                });
-                const txReceipt = await waitForTransactionReceipt(config, {
-                  hash: tx,
-                });
-                setApproveTx(tx);
-                setCompletedTxs(completedTxs + 1);
-              } catch (e) {
-                console.log(e);
-                setTxStarted(0);
-              }
+              // TODO:
+              // setTxStarted(1);
+              // console.log("Approving");
+              // console.log(
+              //   supportedchains[chainId || arbitrumSepolia.id].tokens[fromToken]
+              // );
+              // try {
+              //   const tx = await writeContractAsync({
+              //     abi: erc20Abi,
+              //     address:
+              //       supportedchains[chainId || arbitrumSepolia.id].tokens[
+              //         fromToken
+              //       ],
+              //     functionName: "approve",
+              //     args: [
+              //       pool,
+              //       BigInt(parseEther(fromAmount)) /
+              //         (fromToken == "usdc"
+              //           ? BigInt("1000000000000")
+              //           : BigInt("1")),
+              //     ],
+              //   });
+              //   const txReceipt = await waitForTransactionReceipt(config, {
+              //     hash: tx,
+              //   });
+              //   setApproveTx(tx);
+              //   setCompletedTxs(completedTxs + 1);
+              // } catch (e) {
+              //   console.log(e);
+              //   setTxStarted(0);
+              // }
             }}
           >
             {txStarted == 1 && completedTxs == 0 ? (

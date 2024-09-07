@@ -10,7 +10,6 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import Image from "next/image";
-import { useAccount } from "wagmi";
 import { useState } from "react";
 import Spinner from "@/components/ui/loading";
 import { arbitrumSepolia } from "viem/chains";
@@ -29,7 +28,6 @@ export default function To({
   toLoading: boolean;
   isTestnet: boolean;
 }) {
-  const { chainId } = useAccount();
   const [toChevron, setToChevron] = useState(true);
   return (
     <Card className="w-full pt-4 border-none bg-secondary">

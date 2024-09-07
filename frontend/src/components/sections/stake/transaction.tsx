@@ -18,7 +18,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { parseEther } from "viem";
-import { useAccount, useWriteContract } from "wagmi";
 import "@/styles/spinner.css";
 export default function StakeTransaction({
   stakeAmount,
@@ -33,8 +32,6 @@ export default function StakeTransaction({
 }) {
   const [actionTx, setActionTx] = useState("");
   const { toast } = useToast();
-  const { chainId } = useAccount();
-  const { writeContractAsync } = useWriteContract();
   const [txStarted, setTxStarted] = useState(false);
 
   useEffect(() => {
@@ -47,9 +44,10 @@ export default function StakeTransaction({
             <Link
               target="_blank"
               href={
-                supportedchains[(chainId || 11155111).toString()].explorer +
+                // TODO:
+                `supportedchains[(chainId || 11155111).toString()].explorer +
                 "tx/" +
-                actionTx
+                actionTx`
               }
             >
               View
@@ -106,34 +104,35 @@ export default function StakeTransaction({
             disabled={txStarted}
             onClick={async () => {
               setTxStarted(true);
-              try {
-                const tx = await writeContractAsync({
-                  abi: [
-                    {
-                      inputs: [],
-                      name: "deposit",
-                      outputs: [
-                        {
-                          internalType: "uint256",
-                          name: "mintAmount",
-                          type: "uint256",
-                        },
-                      ],
-                      stateMutability: "payable",
-                      type: "function",
-                    },
-                  ],
-                  address:
-                    supportedchains[(chainId || 11155111).toString()].stake,
-                  functionName: "deposit",
-                  args: [],
-                  value: BigInt(parseEther(stakeAmount)),
-                });
-                setActionTx(tx);
-              } catch (e) {
-                console.log(e);
-                setTxStarted(false);
-              }
+              // TODO:
+              // try {
+              //   const tx = await writeContractAsync({
+              //     abi: [
+              //       {
+              //         inputs: [],
+              //         name: "deposit",
+              //         outputs: [
+              //           {
+              //             internalType: "uint256",
+              //             name: "mintAmount",
+              //             type: "uint256",
+              //           },
+              //         ],
+              //         stateMutability: "payable",
+              //         type: "function",
+              //       },
+              //     ],
+              //     address:
+              //       supportedchains[(chainId || 11155111).toString()].stake,
+              //     functionName: "deposit",
+              //     args: [],
+              //     value: BigInt(parseEther(stakeAmount)),
+              //   });
+              //   setActionTx(tx);
+              // } catch (e) {
+              //   console.log(e);
+              //   setTxStarted(false);
+              // }
             }}
           >
             {txStarted ? (
