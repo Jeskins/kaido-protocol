@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+//ch
+
 import "./interfaces/IOracle.sol";
+
 
 // @title OpenAiChatGpt
 // @notice This contract interacts with teeML oracle to handle chat interactions using the OpenAI model.
