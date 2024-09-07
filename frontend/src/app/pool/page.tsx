@@ -11,6 +11,7 @@ import { erc20Abi, formatEther } from "viem";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
 import { arbitrumSepolia } from "viem/chains";
+import KintoButton from "@/components/ui/custom/kinto-button";
 interface ClassifyResponse {
   response: string;
   action: string;
@@ -163,7 +164,7 @@ export default function PoolPage() {
               </Button>
             </div>
 
-            <p>Kinto Mainnet</p>
+            <KintoButton />
           </div>
         </CardTitle>
         {selectedAction ? (

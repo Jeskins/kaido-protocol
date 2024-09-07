@@ -68,28 +68,26 @@ export default function To({
               </div>
             </MenubarTrigger>
             <MenubarContent>
-              {Object.entries(supportedcoins)
-                .slice(2, 7)
-                .map(([coinId, coin]) => (
-                  <MenubarItem
-                    disabled={coinId == fromToken}
-                    onClick={() => {
-                      setToToken(coinId);
-                      setToChevron(true);
-                    }}
-                  >
-                    <div className="flex space-x-2">
-                      <Image
-                        src={coin.image}
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rounded-full"
-                      />
-                      <p>{coin.symbol}</p>
-                    </div>
-                  </MenubarItem>
-                ))}
+              {Object.entries(supportedcoins).map(([coinId, coin]) => (
+                <MenubarItem
+                  disabled={coinId == fromToken}
+                  onClick={() => {
+                    setToToken(coinId);
+                    setToChevron(true);
+                  }}
+                >
+                  <div className="flex space-x-2">
+                    <Image
+                      src={coin.image}
+                      width={20}
+                      height={20}
+                      alt=""
+                      className="rounded-full"
+                    />
+                    <p>{coin.symbol}</p>
+                  </div>
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>

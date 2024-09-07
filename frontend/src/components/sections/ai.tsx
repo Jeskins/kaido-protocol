@@ -40,7 +40,11 @@ export default function AIComponent({
   const { setOpenAi } = useEnvironmentContext();
   const { open } = useWeb3Modal();
   return (
-    <div className="h-screen my-auto pt-6 flex flex-col bg-background justify-center">
+    <div
+      className={`h-screen my-auto pt-6 flex flex-col bg-background ${
+        address == undefined ? "justify-center" : "justify-start"
+      }`}
+    >
       {address == undefined ? (
         <Button
           onClick={() => {
@@ -56,7 +60,7 @@ export default function AIComponent({
             <p>{address.slice(0, 8) + "...." + address.slice(-6)}</p>
           </div>
 
-          <ScrollArea className="h-[85%] flex flex-col space-y-2 no-scrollbar">
+          <ScrollArea className="h-[80%] flex flex-col space-y-2 no-scrollbar">
             {convos.map((convo) => (
               <div
                 key={convo.id}

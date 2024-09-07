@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useEnvironmentContext } from "../../sections/context";
+import KintoButton from "./kinto-button";
 
 export default function ConnectButton() {
   const { address } = useEnvironmentContext();
@@ -20,10 +21,7 @@ export default function ConnectButton() {
 
   return address != "" ? (
     <>
-      <Button variant={"ghost"} className="space-x-1 font-semibold mx-2">
-        <Image src={"/coins/kinto.png"} width={30} height={30} alt="Kinto" />
-        <p>Kinto Mainnet</p>
-      </Button>
+      <KintoButton />
 
       <Button
         className="my-auto flex space-x-2 rounded-sm"

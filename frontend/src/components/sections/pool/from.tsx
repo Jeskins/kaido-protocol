@@ -59,64 +59,31 @@ export default function From({
                   alt=""
                   className="rounded-full"
                 />
-                <p>{`${isTestnet ? "t" : ""}${
-                  supportedcoins[fromToken].symbol
-                }`}</p>
+                <p>{supportedcoins[fromToken].symbol}</p>
                 {!chevron ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
             </MenubarTrigger>
             <MenubarContent>
-              {/* <MenubarItem
-                disabled={toToken == "eth" || toToken == "edu"}
-                onClick={() => {
-                  setFromToken(chainId == arbitrumSepolia.id ? "eth" : "edu");
-                  setChevron(true);
-                }}
-              >
-                <div className="flex space-x-2">
-                  <Image
-                    src={
-                      supportedcoins[
-                        chainId == arbitrumSepolia.id ? "eth" : "edu"
-                      ].image
-                    }
-                    width={20}
-                    height={20}
-                    alt=""
-                    className="rounded-full"
-                  />
-                  <p>
-                    {
-                      supportedcoins[
-                        chainId == arbitrumSepolia.id ? "eth" : "edu"
-                      ].symbol
-                    }
-                  </p>
-                </div>
-              </MenubarItem> */}
-
-              {Object.entries(supportedcoins)
-                .slice(2, 7)
-                .map(([coinId, coin]) => (
-                  <MenubarItem
-                    disabled={coinId == toToken}
-                    onClick={() => {
-                      setFromToken(coinId);
-                      setChevron(true);
-                    }}
-                  >
-                    <div className="flex space-x-2">
-                      <Image
-                        src={coin.image}
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rounded-full"
-                      />
-                      <p>{(isTestnet ? "t" : "") + coin.symbol}</p>
-                    </div>
-                  </MenubarItem>
-                ))}
+              {Object.entries(supportedcoins).map(([coinId, coin]) => (
+                <MenubarItem
+                  disabled={coinId == toToken}
+                  onClick={() => {
+                    setFromToken(coinId);
+                    setChevron(true);
+                  }}
+                >
+                  <div className="flex space-x-2">
+                    <Image
+                      src={coin.image}
+                      width={20}
+                      height={20}
+                      alt=""
+                      className="rounded-full"
+                    />
+                    <p>{(isTestnet ? "t" : "") + coin.symbol}</p>
+                  </div>
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
