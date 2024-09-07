@@ -1,56 +1,23 @@
 const { networks } = require("../networks");
-
+const {
+  abi,
+} = require("../artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json");
 task("swap", "Create a pool").setAction(async (taskArgs) => {
   const { ethers } = hre;
   const [signer] = await ethers.getSigners();
 
-  // // CHANGE THIS
-  const poolAddress = networks[network.name].wethUsdcPool;
+  const poolAddress = networks[network.name].pools.wethusdc;
   const recipient = signer.address;
-  const zeroForOne = true;
+  const zeroForOne = false;
 
-  const core = new ethers.Contract(
-    poolAddress,
-    [
-      {
-        constant: false,
-        inputs: [
-          {
-            name: "recipient",
-            type: "address",
-          },
-          {
-            name: "zeroForOne",
-            type: "bool",
-          },
-          {
-            name: "amount0",
-            type: "uint256",
-          },
-          {
-            name: "amount1",
-            type: "uint256",
-          },
-        ],
-        name: "swap",
-        outputs: [
-          {
-            name: "",
-            type: "uint256",
-          },
-          {
-            name: "",
-            type: "uint256",
-          },
-        ],
-        payable: false,
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    signer
+  const core = new ethers.Contract(poolAddress, abi, signer);
+
+  const response = await core.swap(
+    recipient,
+    zeroForOne,
+    "100000",
+    "1461446703485210103287273052203988822378723970342"
   );
-  const response = await core.swap(recipient, zeroForOne, "100000", "100000");
   const receipt = await response.wait();
   console.log(receipt);
 });

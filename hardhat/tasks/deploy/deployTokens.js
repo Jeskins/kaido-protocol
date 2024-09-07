@@ -7,7 +7,6 @@ task("deploy-tokens", "Deploys the Tokens")
     types.boolean
   )
   .setAction(async (taskArgs, hre) => {
-    networks.hardhat.usdt = "0xNewUSDTAddressHere";
     console.log("\n__Compiling Contracts__");
     await run("compile");
     const verifyContract = taskArgs.verify;
@@ -28,7 +27,6 @@ task("deploy-tokens", "Deploys the Tokens")
       await contract.deployTransaction.wait(
         networks[network.name].confirmations
       );
-      tokenDeployments[token.substring(0, 4).toLowerCase()] = contract.address;
       console.log(
         `\n ${token} contract deployed to ${contract.address} on ${network.name}`
       );
@@ -54,6 +52,4 @@ task("deploy-tokens", "Deploys the Tokens")
         }
       }
     }
-
-    // addTokenDeployments(network.name, tokenDeployments);
   });

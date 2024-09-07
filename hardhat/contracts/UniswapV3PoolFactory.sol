@@ -36,7 +36,6 @@ contract UniswapV3PoolFactory {
         uint160 sqrtPriceX96
     ) external returns (address pool) {
         require(token0 != token1);
-        // (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA);
 
         require(token0 != address(0));
         int24 tickSpacing = feeAmountTickSpacing[fee];
@@ -71,6 +70,5 @@ contract UniswapV3PoolFactory {
         feeAmountTickSpacing[fee] = tickSpacing;
         emit FeeAmountEnabled(fee, tickSpacing);
     }
-
 
 }
