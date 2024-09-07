@@ -26,7 +26,6 @@
     "@supabase/supabase-js": "^2.44.2",
     "@tanstack/react-query": "^5.55.0",
     "@tanstack/react-table": "^8.20.1",
-    "@web3modal/siwe": "^5.1.6",
     "@web3modal/wagmi": "^5.1.6",
     "@worldcoin/idkit": "^1.2.0",
     "@xmtp/react-sdk": "^8.0.1",
