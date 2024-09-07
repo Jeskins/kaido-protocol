@@ -21,17 +21,3 @@ Rest of this README assumes you are in the `examples` directory
 npm run chat
 ```
 
-**Chat Vision example**
-```
-npm run chat_vision
-```
-
-**Anthropic Claude example**
-```
-npm run chat_anthropic
-```
-
-**Agent example**
-```
-npm run agent
-```
