@@ -18,3 +18,32 @@ export const kinto = defineChain({
     default: { name: "Explorer", url: "https://kintoscan.io" },
   },
 });
+
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+
+import { cookieStorage, createStorage } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
+
+// Get projectId from https://cloud.walletconnect.com
+export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
+
+if (!projectId) throw new Error("Project ID is not defined");
+
+export const metadata = {
+  name: "Kaido Protocol",
+  description: "Defi, for the new Degens",
+  url: "https://kaido-protocol.vercel.app", // origin must match your domain & subdomain
+  icons: ["https://kaido-protocol.vercel.app/logo.png"],
+};
+
+// Create wagmiConfig
+const chains = [arbitrumSepolia] as const;
+export const config = defaultWagmiConfig({
+  chains,
+  projectId,
+  metadata,
+  ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+});

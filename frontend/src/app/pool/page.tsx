@@ -4,19 +4,8 @@ import Swap from "@/components/sections/pool/swap";
 import Transaction from "@/components/sections/pool/transaction";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import ConnectButton from "@/components/ui/custom/connect-button";
-import {
-  Menubar,
-  MenubarTrigger,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-} from "@/components/ui/menubar";
-import { supportedcoins } from "@/lib/constants";
 
 import axios from "axios";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import Image from "next/image";
 import { use, useEffect, useState } from "react";
 import { erc20Abi, formatEther } from "viem";
 import { roundUpToFiveDecimals } from "@/lib/utils";
@@ -84,6 +73,7 @@ export default function PoolPage() {
   }, [fromToken, toToken, aiTriggered]);
 
   useEffect(() => {
+    if (address == "" || balance == null) return;
     if (selectedAction) {
       if (sellingPrice == "0") setSellingPrice(fromCoversionValue);
       const f = fromAmount == "" ? "0" : fromAmount;
@@ -207,7 +197,7 @@ export default function PoolPage() {
               toAmount,
               setSlippage,
               slippage,
-              fromBalance: balance[arbitrumSepolia.id][fromToken],
+              fromBalance: balance[fromToken],
               toLoading,
               triggerAction: () => {
                 setOpenTransaction(true);
