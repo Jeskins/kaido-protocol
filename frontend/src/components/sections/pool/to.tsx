@@ -70,7 +70,11 @@ export default function To({
             <MenubarContent>
               {Object.entries(supportedcoins).map(([coinId, coin]) => (
                 <MenubarItem
-                  disabled={coinId == fromToken}
+                  disabled={
+                    coinId == fromToken ||
+                    (coinId == "eth" && fromToken == "weth") ||
+                    (coinId == "weth" && fromToken == "eth")
+                  }
                   onClick={() => {
                     setToToken(coinId);
                     setToChevron(true);
