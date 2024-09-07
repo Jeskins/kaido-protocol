@@ -16,16 +16,16 @@ import {
   Notebook,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 export default function PositionPage() {
-  const { address } = useEnvironmentContext();
+  const { address } = useAccount();
   const [positions, setPositions] = useState<Position[] | null>([]);
   const [actions, setActions] = useState<Action[] | null>([]);
   const [totalDeposited, setTotalDeposited] = useState<string | null>("0");
   const [totalClaimed, setTotalClaimed] = useState<string | null>("0");
   const { balance } = useEnvironmentContext();
   // Get Net Spent
-  if (address == null || balance == null) return <div></div>;
   useEffect(() => {
     if (positions == null) return;
     console.log("positions");
@@ -86,6 +86,7 @@ export default function PositionPage() {
   //     setActions(act);
   //   })();
   // }, []);
+  if (address == null || balance == null) return <div></div>;
 
   if (
     totalDeposited == null ||

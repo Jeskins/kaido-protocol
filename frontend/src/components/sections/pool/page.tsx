@@ -12,9 +12,10 @@ import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
 import { arbitrumSepolia } from "viem/chains";
 import KintoButton from "@/components/ui/custom/kinto-button";
+import { useAccount } from "wagmi";
 
 export default function PoolPage() {
-  const { address, balance } = useEnvironmentContext();
+  const { balance } = useEnvironmentContext();
   const [selectedAction, setSelectedAction] = useState(false);
   const [fromAmount, setFromAmount] = useState("0");
   const [fromToken, setFromToken] = useState("usdc");
@@ -32,8 +33,7 @@ export default function PoolPage() {
   const [chainChevron, setChainChevron] = useState(true);
   const { action, actionParams } = useEnvironmentContext();
   const [aiTriggered, setAiTriggered] = useState(false);
-
-  if (address == null || balance == null) return <div></div>;
+  const { address } = useAccount();
 
   useEffect(() => {
     (async function () {
@@ -69,7 +69,7 @@ export default function PoolPage() {
   }, [fromToken, toToken, aiTriggered]);
 
   useEffect(() => {
-    if (address == "" || balance == null) return;
+    if (address == null || balance == null) return;
     if (selectedAction) {
       if (sellingPrice == "0") setSellingPrice(fromCoversionValue);
       const f = fromAmount == "" ? "0" : fromAmount;
@@ -126,6 +126,7 @@ export default function PoolPage() {
       setAiTriggered(!aiTriggered);
     }
   }, [actionParams]);
+  if (address == null || balance == null) return <div></div>;
 
   return (
     <div className="flex justify-center items-center h-full">
