@@ -1,3 +1,9 @@
+import {
+  SIWECreateMessageArgs,
+  SIWESession,
+  SIWEVerifyMessageArgs,
+} from "@web3modal/siwe";
+
 export type Address = `0x${string}`;
 
 export type Action = {
@@ -114,4 +120,29 @@ export interface TxCall {
   to: `0x${string}`;
   data: `0x${string}`;
   value: bigint;
+}
+
+export interface SIWEConfig {
+  // Required
+  getNonce: () => Promise<string>;
+  createMessage: (args: SIWECreateMessageArgs) => string;
+  verifyMessage: (args: SIWEVerifyMessageArgs) => Promise<boolean>;
+  getSession: () => Promise<SIWESession | null>;
+  signOut: () => Promise<boolean>;
+
+  // Optional
+  onSignIn?: (session?: SIWESession) => void;
+  onSignOut?: () => void;
+  // Defaults to true
+  enabled?: boolean;
+  // In milliseconds, defaults to 5 minutes
+  nonceRefetchIntervalMs?: number;
+  // In milliseconds, defaults to 5 minutes
+  sessionRefetchIntervalMs?: number;
+  // Defaults to true
+  signOutOnDisconnect?: boolean;
+  // Defaults to true
+  signOutOnAccountChange?: boolean;
+  // Defaults to true
+  signOutOnNetworkChange?: boolean;
 }

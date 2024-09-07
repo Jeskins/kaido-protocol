@@ -24,7 +24,6 @@ import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { cookieStorage, createStorage } from "wagmi";
 import { arbitrumSepolia } from "wagmi/chains";
 
-// Get projectId from https://cloud.walletconnect.com
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
 if (!projectId) throw new Error("Project ID is not defined");
@@ -42,14 +41,4 @@ export const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
-  ssr: true,
-  auth: {
-    email: false, // default to true
-    socials: ["google", "farcaster"],
-    showWallets: true, // default to true
-    walletFeatures: true, // default to true
-  },
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
 });
