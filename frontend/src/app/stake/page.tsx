@@ -57,16 +57,17 @@ export default function StakePage() {
   //   );
   // }, [sharePrice, stakeAmount]);
 
-  useEffect(() => {
-    if (action == "stake" && actionParams.length > 0) {
-      const p = actionParams.split("_");
-      setStakeAmount(p[1]);
-      const c = parseInt(p[0]);
-    }
-  }, [action, actionParams]);
+  // useEffect(() => {
+  //   if (action == "stake" && actionParams.length > 0) {
+  //     const p = actionParams.split("_");
+  //     setStakeAmount(p[1]);
+  //     const c = parseInt(p[0]);
+  //   }
+  // }, [action, actionParams]);
   return (
     <div className="flex justify-center items-center h-full">
-      <Card className="border-none w-[500px] ">
+      <p className="font-semibold text-sm select-none">Coming Soon</p>
+      {/* <Card className="border-none w-[500px] ">
         <SwitchChainHeader />
         <CardContent>
           <ApyTvl />
@@ -117,7 +118,7 @@ export default function StakePage() {
         stoneAmount={stoneAmount}
         open={open}
         setOpen={setOpen}
-      />
+      /> */}
     </div>
   );
 }

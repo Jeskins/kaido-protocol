@@ -105,18 +105,18 @@ export default function Page() {
         <BoxCard
           title="Positions"
           value={positions.length.toString()}
-          icon={<Notebook className="h-6 w-6 text-blue-500 " />}
+          icon={<Notebook className="h-6 w-6 text-stone-500 " />}
         />
         <BoxCard
           title="Net Spent"
           value={totalDeposited}
-          icon={<CircleDollarSign className="h-6 w-6 text-blue-500 " />}
+          icon={<CircleDollarSign className="h-6 w-6 text-stone-500 " />}
         />
 
         <BoxCard
           title="Claimed Fees"
           value={totalClaimed != "0" ? "+" + totalClaimed : totalClaimed}
-          icon={<BaggageClaim className="h-6 w-6 text-blue-500" />}
+          icon={<BaggageClaim className="h-6 w-6 text-stone-500" />}
         />
       </div>
       <PositionsCard positions={positions} />
