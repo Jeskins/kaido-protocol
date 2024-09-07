@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { RecentActions } from "../../ui/recent-actions";
+import { RecentActions } from "../../ui/custom/recent-actions";
 import { Action } from "@/lib/type";
 
 export default function RecentActionsCard({ actions }: { actions: Action[] }) {

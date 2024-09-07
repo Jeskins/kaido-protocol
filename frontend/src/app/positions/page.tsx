@@ -5,7 +5,7 @@ import DefaultLanding from "@/components/sections/default-landing";
 import PositionsCard from "@/components/sections/position/positions-card";
 import RecentActionsCard from "@/components/sections/position/recent-actions-card";
 import BoxCard from "@/components/ui/box-card";
-import ConnectButton from "@/components/ui/connect-button";
+import ConnectButton from "@/components/ui/custom/connect-button";
 import Spinner from "@/components/ui/loading";
 import { Action, Position } from "@/lib/type";
 import { getTotalClaimed, getTotalDeposited } from "@/lib/utils";

@@ -4,7 +4,7 @@ import {
   ArrowUpRightFromSquare,
   TicketX,
 } from "lucide-react";
-import { buttonVariants } from "./button";
+import { buttonVariants } from "../button";
 import Link from "next/link";
 import { Action } from "@/lib/type";
 import { timeAgo } from "@/lib/utils";

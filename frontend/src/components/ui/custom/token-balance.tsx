@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supportedchains, supportedcoins } from "@/lib/constants";
 import { useEffect } from "react";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import { ScrollArea, ScrollBar } from "../scroll-area";
 
 export function TokenBalance({
   balances,

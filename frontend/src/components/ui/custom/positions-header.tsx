@@ -1,11 +1,11 @@
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useState } from "react";
-import { Label } from "./label";
+import { Label } from "../label";
 import Link from "next/link";
-import { Button, buttonVariants } from "./button";
+import { Button, buttonVariants } from "../button";
 import { Plus } from "lucide-react";
-import { useEnvironmentContext } from "../sections/context";
-import { CreatePositionDialog } from "../sections/position/create-position-dialog";
+import { useEnvironmentContext } from "../../sections/context";
+import { CreatePositionDialog } from "../../sections/position/create-position-dialog";
 
 export default function PositionsHeader() {
   const [checked, setChecked] = useState(false);

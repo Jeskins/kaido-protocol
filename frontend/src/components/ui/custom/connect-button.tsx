@@ -1,6 +1,6 @@
 import { arbitrumSepolia } from "viem/chains";
-import { Button } from "./button";
-import { Icons } from "./icons";
+import { Button } from "../button";
+import { Icons } from "../icons";
 import {
   Menubar,
   MenubarTrigger,
@@ -13,7 +13,7 @@ import { supportedchains } from "@/lib/constants";
 import { ArrowLeftCircleIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { useEnvironmentContext } from "../sections/context";
+import { useEnvironmentContext } from "../../sections/context";
 
 export default function ConnectButton() {
   const { address } = useEnvironmentContext();

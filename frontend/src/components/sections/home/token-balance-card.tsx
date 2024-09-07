@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TokenBalance } from "@/components/ui/token-balance";
+import { TokenBalance } from "@/components/ui/custom/token-balance";
 
 export default function TokenBalanceCard({
   balances,

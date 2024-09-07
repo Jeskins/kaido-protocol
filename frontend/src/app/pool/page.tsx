@@ -4,7 +4,7 @@ import Swap from "@/components/sections/pool/swap";
 import Transaction from "@/components/sections/pool/transaction";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import ConnectButton from "@/components/ui/connect-button";
+import ConnectButton from "@/components/ui/custom/connect-button";
 import {
   Menubar,
   MenubarTrigger,

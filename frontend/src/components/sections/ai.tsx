@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { ReactTyped } from "react-typed";
-import LoadingDots from "@/components/ui/loading-dots";
+import LoadingDots from "@/components/ui/custom-ui/loading-dots";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import axios from "axios";
 import { useEnvironmentContext } from "./context";

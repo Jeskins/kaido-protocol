@@ -1,6 +1,5 @@
 import Image from "next/image";
-import ConnectButton from "../ui/connect-button";
-import { HeroHighlight, Highlight } from "../ui/hero-highlight";
+import { HeroHighlight, Highlight } from "../ui/custom-ui/hero-highlight";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";

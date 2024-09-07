@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import ConnectButton from "@/components/ui/connect-button";
+import ConnectButton from "@/components/ui/custom/connect-button";
 import { useEffect, useState } from "react";
 import { MainNav } from "./navbar";
 import AIComponent from "./ai";
@@ -23,8 +23,11 @@ import axios from "axios";
 import { supportedchains, supportedcoins } from "@/lib/constants";
 import { usePathname, useRouter } from "next/navigation";
 import { arbitrumSepolia } from "viem/chains";
-import { BackgroundBeams } from "../ui/background-beams";
-import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
+import { BackgroundBeams } from "../ui/custom-ui/background-beams";
+import {
+  HeroHighlight,
+  Highlight,
+} from "@/components/ui/custom-ui/hero-highlight";
 import { motion } from "framer-motion";
 import DefaultLanding from "./default-landing";
 interface Convo {
