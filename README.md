@@ -20,7 +20,7 @@ The AI agent, built with Galadriel, is integrated into our platform using XMTP c
 
 ### Galdriel
 
-Implemented OpenAI's GPT-4 for LLM conversations and added web search tools for Real-Time Market Analysis
+Implemented OpenAI's GPT-4 for LLM conversations and added web search tools for Real-Time Market Analysis offering the users with Investment plans and Current Market Sentiments based on their portfolio ofeering a personalized experience.
 
 ### Kinto
 
