@@ -6,7 +6,6 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { useClient } from "@xmtp/react-sdk";
 import { ethers, Signer } from "ethers";
 import { createKintoSDK } from "kinto-web-sdk";
 import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";

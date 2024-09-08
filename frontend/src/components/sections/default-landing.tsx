@@ -57,25 +57,6 @@ export default function DefaultLanding() {
           >
             {"Connect Your Kinto Wallet"}
           </Button>
-          <p className="text-xs font-medium text-stone-400 mt-1 cursor-pointer">
-            Don't have an account? &nbsp;
-            <span
-              className="underline hover:text-white"
-              onClick={() => {
-                kintoSDK
-                  .createNewWallet()
-                  .then(() => {
-                    console.log("New wallet created successfully");
-                  })
-                  .catch((error) => {
-                    console.error("Failed to create new wallet:", error);
-                  });
-              }}
-            >
-              Create Wallet
-            </span>
-          </p>
-          {/* <ConnectButton /> */}
         </div>
       </motion.h1>
     </HeroHighlight>

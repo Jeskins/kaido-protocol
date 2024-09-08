@@ -1,39 +1,22 @@
 "use client";
 import Image from "next/image";
-
+import dynamic from "next/dynamic";
 import ConnectButton from "@/components/ui/custom/connect-button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MainNav } from "./navbar";
-import AIComponent from "./ai";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  ArrowLeftCircleIcon,
-  ArrowRight,
-  ArrowRightCircleIcon,
-} from "lucide-react";
+
 import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";
 import axios from "axios";
-import { supportedcoins } from "@/lib/constants";
-import { usePathname, useRouter } from "next/navigation";
-import { arbitrumSepolia } from "viem/chains";
 import { BackgroundBeams } from "../ui/custom-ui/background-beams";
-import {
-  HeroHighlight,
-  Highlight,
-} from "@/components/ui/custom-ui/hero-highlight";
-import { motion } from "framer-motion";
+
 import DefaultLanding from "./default-landing";
 import { Faucet } from "../ui/faucet";
-import { useClient } from "@xmtp/react-sdk";
-import { initXmtpWithKeys } from "@/lib/helpers/xmtp";
+
+const AIWrapper = dynamic(() => import("@/components/sections/ai-wrapper"), {
+  ssr: false,
+});
+
 interface Convo {
   id: string;
   isAI: boolean;
@@ -51,33 +34,9 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { address, setIsOnNetwork, isOnNetwork, signer } =
-    useEnvironmentContext();
-
-  const { openAi, setOpenAi } = useEnvironmentContext();
+  const { address, setOpenAi } = useEnvironmentContext();
   const [convos, setConvos] = useState<Convo[]>([]);
 
-  const { client, initialize: initializeXmtp } = useClient();
-
-  useEffect(() => {
-    const initialIsOnNetwork =
-      localStorage.getItem("isOnNetwork") === "true" || false;
-
-    setIsOnNetwork(initialIsOnNetwork);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("isOnNetwork", isOnNetwork.toString());
-    localStorage.setItem("isConnected", (address != "").toString());
-  }, [address, isOnNetwork]);
-  useEffect(() => {
-    if (client && !isOnNetwork) {
-      setIsOnNetwork(true);
-    }
-    if (signer && isOnNetwork) {
-      initXmtpWithKeys(signer, initializeXmtp);
-    }
-  }, [address, signer, client]);
   return (
     <>
       {address == "" ? (
@@ -93,40 +52,39 @@ export default function Layout({ children }: LayoutProps) {
                   <MainNav
                     className="mx-6"
                     setOpenAi={async (path: string) => {
-                      setOpenAi(true);
-                      try {
-                        const response = await axios.post("/api/classify", {
-                          message: path,
-                        });
-
-                        console.log(response.data);
-                        if (response.data.success == false)
-                          throw Error("Error in response");
-                        console.log(typeof response.data.response.response);
-                        setConvos([
-                          ...convos,
-                          {
-                            id: (convos.length + 1).toString(),
-                            isAI: true,
-                            message: response.data.response.response,
-                          },
-                        ]);
-                        console.log({
-                          id: (convos.length + 1).toString(),
-                          isAI: true,
-                          message: response.data.response.response,
-                        });
-                      } catch (e) {
-                        console.log(e);
-                        setConvos([
-                          ...convos,
-                          {
-                            id: (convos.length + 1).toString(),
-                            isAI: true,
-                            message: "Please refresh the page and try again.",
-                          },
-                        ]);
-                      }
+                      // setOpenAi(true);
+                      // try {
+                      //   const response = await axios.post("/api/classify", {
+                      //     message: path,
+                      //   });
+                      //   console.log(response.data);
+                      //   if (response.data.success == false)
+                      //     throw Error("Error in response");
+                      //   console.log(typeof response.data.response.response);
+                      //   setConvos([
+                      //     ...convos,
+                      //     {
+                      //       id: (convos.length + 1).toString(),
+                      //       isAI: true,
+                      //       message: response.data.response.response,
+                      //     },
+                      //   ]);
+                      //   console.log({
+                      //     id: (convos.length + 1).toString(),
+                      //     isAI: true,
+                      //     message: response.data.response.response,
+                      //   });
+                      // } catch (e) {
+                      //   console.log(e);
+                      //   setConvos([
+                      //     ...convos,
+                      //     {
+                      //       id: (convos.length + 1).toString(),
+                      //       isAI: true,
+                      //       message: "Please refresh the page and try again.",
+                      //     },
+                      //   ]);
+                      // }
                     }}
                   />
                 </div>
@@ -157,28 +115,7 @@ export default function Layout({ children }: LayoutProps) {
               className="bg-transparent rounded-full border-2 border-secondary hover:bg-secondary"
             />
           </Button>
-          <Sheet
-            open={openAi}
-            onOpenChange={(open) => {
-              setOpenAi(open);
-            }}
-          >
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle className="relative">
-                  <ArrowRight
-                    className="h-10 w-10 absolute -left-9 bg-background border-[1px]  p-2 text-WHITE cursor-pointer rounded-lg"
-                    onClick={() => {
-                      setOpenAi(false);
-                    }}
-                  />
-                </SheetTitle>
-                <SheetDescription className="h-screen">
-                  <AIComponent />
-                </SheetDescription>
-              </SheetHeader>
-            </SheetContent>
-          </Sheet>
+          <AIWrapper />
           <Faucet />
         </div>
       )}
