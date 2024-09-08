@@ -20,6 +20,8 @@ The AI agent, built with Galadriel, is integrated into our platform using XMTP c
 
 ### Galdriel
 
+Implemented OpenAI's GPT-4 for LLM conversations and added web search tools for Real-Time Market Analysis
+
 ### Kinto
 
 ### XMTP
@@ -47,6 +49,6 @@ We welcome contributions from the community! Please feel free to submit issues, 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-Built with ❤️ by @Jeskins and @Marhsal-AM
+Built with ❤️ by @Jeskins and @Marshal-AM
 
 
