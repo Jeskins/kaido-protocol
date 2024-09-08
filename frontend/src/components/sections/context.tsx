@@ -1,3 +1,4 @@
+"use client";
 import React, {
   createContext,
   useContext,
@@ -5,11 +6,14 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
+import { ethers, Signer } from "ethers";
 import { createKintoSDK } from "kinto-web-sdk";
 import { balance, ClassifyResponse, Convo, KintoSDK } from "@/lib/type";
-import { createPublicClient, formatEther, http } from "viem";
+import { createPublicClient, http, PublicClient, WalletClient } from "viem";
 import { kinto } from "@/lib/config";
 import getAllbalance from "@/lib/helpers/getAllBalances";
+import { fetchAccountInfo, fetchKYCViewerInfo } from "@/lib/helpers/kinto";
+
 interface BalanceContextType {
   kintoSDK: KintoSDK;
   address: string;
@@ -31,13 +35,16 @@ interface BalanceContextType {
     openPositionTransactionModal: boolean
   ) => void;
   openFaucet: boolean;
-  setOpenFacuet: (openFaucet: boolean) => void;
+  setOpenFaucet: (openFaucet: boolean) => void;
   publicClient: any;
   setPublicClient: (publicClient: any) => void;
   convos: Convo[];
   setConvos: (convos: Convo[]) => void;
   classifyResponse: ClassifyResponse;
   setClassifyResponse: (classifyResponse: ClassifyResponse) => void;
+  isOnNetwork: boolean;
+  setIsOnNetwork: (isOnNetwork: boolean) => void;
+  signer: Signer | null;
 }
 
 const BalanceContext = createContext<BalanceContextType | undefined>(undefined);
@@ -62,7 +69,7 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
     suggestions: [],
   });
   const [convos, setConvos] = useState<Convo[]>([]);
-  const [openFaucet, setOpenFacuet] = useState<boolean>(true);
+  const [openFaucet, setOpenFaucet] = useState<boolean>(false);
   const [totalBalance, setTotalBalance] = useState<number | null>(null);
   const [openAi, setOpenAi] = useState<boolean>(false);
   const [actionParams, setActionParams] = useState<string>("");
@@ -70,7 +77,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
   const [openPositionTransactionModal, setOpenPositionTransactionModal] =
     useState<boolean>(false);
   const [address, setAddress] = useState("");
-  const [publicClient, setPublicClient] = useState<any>(null);
+  const [publicClient, setPublicClient] = useState<PublicClient | null>(null);
+  const [kycViewerInfo, setKycViewerInfo] = useState<any>(null);
+  const [isOnNetwork, setIsOnNetwork] = useState(false);
+  const [signer, setSigner] = useState<Signer | null>(null);
   useEffect(() => {
     const client = createPublicClient({
       chain: kinto,
@@ -90,7 +100,45 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         setBalanceInUSD
       );
     })();
+    const provider = new ethers.providers.Web3Provider(
+      (window as any).ethereum
+    );
+    setSigner(provider.getSigner());
   }, [address]);
+
+  useEffect(() => {
+    fetchAccountInfo(kintoSDK, setAddress);
+  }, []);
+
+  useEffect(() => {
+    if (address != "" && publicClient != null) {
+      fetchKYCViewerInfo(address, publicClient).then((res) =>
+        setKycViewerInfo(res)
+      );
+    }
+  }, [address, publicClient]);
+
+  useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          const modal = document.getElementById("kinto-sdk-modal");
+          if (modal) {
+            modal.style.zIndex = "69420";
+          }
+        }
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // XMTP
+
   return (
     <BalanceContext.Provider
       value={{
@@ -118,7 +166,10 @@ export const BalanceProvider = ({ children }: { children: ReactNode }) => {
         convos,
         setConvos,
         openFaucet,
-        setOpenFacuet,
+        setOpenFaucet,
+        isOnNetwork,
+        setIsOnNetwork,
+        signer,
       }}
     >
       {children}

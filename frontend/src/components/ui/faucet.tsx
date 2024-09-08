@@ -8,8 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useEnvironmentContext } from "../sections/context";
 import Image from "next/image";
 import { encodeFunctionData } from "viem";
@@ -20,7 +18,7 @@ import { ToastAction } from "./toast";
 import Link from "next/link";
 
 export function Faucet() {
-  const { openFaucet, setOpenFacuet, kintoSDK, address, publicClient } =
+  const { openFaucet, setOpenFaucet, kintoSDK, address, publicClient } =
     useEnvironmentContext();
   const { toast } = useToast();
 
@@ -42,13 +40,14 @@ export function Faucet() {
           </ToastAction>
         ),
       });
+      setMintTx("");
     }
   }, [mintTx]);
   return (
     <Dialog
       open={openFaucet}
       onOpenChange={(op) => {
-        setOpenFacuet(op);
+        setOpenFaucet(op);
       }}
     >
       <DialogContent className="sm:max-w-[425px]">
@@ -70,26 +69,33 @@ export function Faucet() {
                   BigInt("10000000000000000000"),
                 ],
               });
+              try {
+                await kintoSDK.sendTransaction([
+                  {
+                    to: kintoInfo.tokens.link as `0x${string}`,
+                    value: BigInt("0"),
+                    data: mintData,
+                  },
+                ]);
 
-              await kintoSDK.sendTransaction([
-                {
-                  to: kintoInfo.tokens.link as `0x${string}`,
-                  value: BigInt("0"),
-                  data: mintData,
-                },
-              ]);
-
-              const unwatch = publicClient.watchContractEvent({
-                address: kintoInfo.tokens.link as `0x${string}`,
-                abi: tokenAbi,
-                eventName: "Transfer",
-                args: { to: address },
-                onLogs: (logs: any) => {
-                  console.log(logs);
-                  setMintTx(logs.transactionHash);
-                  unwatch();
-                },
-              });
+                const unwatch = publicClient.watchContractEvent({
+                  address: kintoInfo.tokens.link as `0x${string}`,
+                  abi: tokenAbi,
+                  eventName: "Transfer",
+                  args: { to: address },
+                  onLogs: (logs: any) => {
+                    console.log(logs);
+                    setMintTx(logs.transactionHash);
+                    unwatch();
+                  },
+                });
+              } catch (e) {
+                toast({
+                  title: "Drip Tokens Unsuccesful",
+                  description: "Transaction Failed or Rejected",
+                });
+                setMintTx("");
+              }
             }}
             disabled={mintTx == "-1"}
           >
@@ -114,26 +120,33 @@ export function Faucet() {
                   BigInt("10000000000000000000"),
                 ],
               });
+              try {
+                await kintoSDK.sendTransaction([
+                  {
+                    to: kintoInfo.tokens.weth as `0x${string}`,
+                    value: BigInt("0"),
+                    data: mintData,
+                  },
+                ]);
 
-              await kintoSDK.sendTransaction([
-                {
-                  to: kintoInfo.tokens.weth as `0x${string}`,
-                  value: BigInt("0"),
-                  data: mintData,
-                },
-              ]);
-
-              const unwatch = publicClient.watchContractEvent({
-                address: kintoInfo.tokens.weth as `0x${string}`,
-                abi: tokenAbi,
-                eventName: "Transfer",
-                args: { to: address },
-                onLogs: (logs: any) => {
-                  console.log(logs);
-                  setMintTx(logs.transactionHash);
-                  unwatch();
-                },
-              });
+                const unwatch = publicClient.watchContractEvent({
+                  address: kintoInfo.tokens.weth as `0x${string}`,
+                  abi: tokenAbi,
+                  eventName: "Transfer",
+                  args: { to: address },
+                  onLogs: (logs: any) => {
+                    console.log(logs);
+                    setMintTx(logs.transactionHash);
+                    unwatch();
+                  },
+                });
+              } catch (e) {
+                toast({
+                  title: "Drip Tokens Unsuccesful",
+                  description: "Transaction Failed or Rejected",
+                });
+                setMintTx("");
+              }
             }}
           >
             <Image
@@ -157,26 +170,33 @@ export function Faucet() {
                   BigInt("10000000000000000000"),
                 ],
               });
+              try {
+                await kintoSDK.sendTransaction([
+                  {
+                    to: kintoInfo.tokens.usdt as `0x${string}`,
+                    value: BigInt("0"),
+                    data: mintData,
+                  },
+                ]);
 
-              await kintoSDK.sendTransaction([
-                {
-                  to: kintoInfo.tokens.usdt as `0x${string}`,
-                  value: BigInt("0"),
-                  data: mintData,
-                },
-              ]);
-
-              const unwatch = publicClient.watchContractEvent({
-                address: kintoInfo.tokens.usdt as `0x${string}`,
-                abi: tokenAbi,
-                eventName: "Transfer",
-                args: { to: address },
-                onLogs: (logs: any) => {
-                  console.log(logs);
-                  setMintTx(logs.transactionHash);
-                  unwatch();
-                },
-              });
+                const unwatch = publicClient.watchContractEvent({
+                  address: kintoInfo.tokens.usdt as `0x${string}`,
+                  abi: tokenAbi,
+                  eventName: "Transfer",
+                  args: { to: address },
+                  onLogs: (logs: any) => {
+                    console.log(logs);
+                    setMintTx(logs.transactionHash);
+                    unwatch();
+                  },
+                });
+              } catch (e) {
+                toast({
+                  title: "Drip Tokens Unsuccesful",
+                  description: "Transaction Failed or Rejected",
+                });
+                setMintTx("");
+              }
             }}
           >
             <Image
@@ -197,26 +217,33 @@ export function Faucet() {
                 abi: tokenAbi,
                 args: [address as `0x${string}`, BigInt("10000000")],
               });
+              try {
+                await kintoSDK.sendTransaction([
+                  {
+                    to: kintoInfo.tokens.usdc as `0x${string}`,
+                    value: BigInt("0"),
+                    data: mintData,
+                  },
+                ]);
 
-              await kintoSDK.sendTransaction([
-                {
-                  to: kintoInfo.tokens.usdc as `0x${string}`,
-                  value: BigInt("0"),
-                  data: mintData,
-                },
-              ]);
-
-              const unwatch = publicClient.watchContractEvent({
-                address: kintoInfo.tokens.usdc as `0x${string}`,
-                abi: tokenAbi,
-                eventName: "Transfer",
-                args: { to: address },
-                onLogs: (logs: any) => {
-                  console.log(logs);
-                  setMintTx(logs.transactionHash);
-                  unwatch();
-                },
-              });
+                const unwatch = publicClient.watchContractEvent({
+                  address: kintoInfo.tokens.usdc as `0x${string}`,
+                  abi: tokenAbi,
+                  eventName: "Transfer",
+                  args: { to: address },
+                  onLogs: (logs: any) => {
+                    console.log(logs);
+                    setMintTx(logs.transactionHash);
+                    unwatch();
+                  },
+                });
+              } catch (e) {
+                toast({
+                  title: "Drip Tokens Unsuccesful",
+                  description: "Transaction Failed or Rejected",
+                });
+                setMintTx("");
+              }
             }}
           >
             <Image
@@ -227,25 +254,6 @@ export function Faucet() {
               className="mx-2 rounded-full"
             />
             10 USDC
-          </Button>
-          <Button
-            variant={"outline"}
-            disabled={mintTx == "-1"}
-            onClick={async () => {
-              try {
-                const response = await kintoSDK.sendTransaction([
-                  {
-                    to: "0x1f8c3783795bd42b6f20D9392704C97635d78489",
-                    value: BigInt("1900000000000000"),
-                    data: "0x",
-                  },
-                ]);
-              } catch (e) {
-                console.log(e);
-              }
-            }}
-          >
-            Send Value
           </Button>
         </div>
       </DialogContent>

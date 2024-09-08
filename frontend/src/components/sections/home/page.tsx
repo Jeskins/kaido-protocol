@@ -5,12 +5,12 @@ import Image from "next/image";
 import { roundUpToFiveDecimals } from "@/lib/utils";
 import { useEnvironmentContext } from "@/components/sections/context";
 import "@/styles/spinner.css";
+import { useAccount } from "wagmi";
 
 export default function HomePage() {
-  const { address } = useEnvironmentContext();
   const { totalBalance, balance, balanceInUSD } = useEnvironmentContext();
-
-  if (totalBalance == null)
+  const { address } = useAccount();
+  if (address == null || totalBalance == null)
     return (
       <div className="flex-1 flex flex-col justify-center items-center">
         <div className="flex space-x-4 items-center">
