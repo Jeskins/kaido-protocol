@@ -1,5 +1,10 @@
-import PositionPage from "@/components/sections/position/page";
-
+import dynamic from "next/dynamic";
+const PositionPage = dynamic(
+  () => import("@/components/sections/position/page"),
+  {
+    ssr: false,
+  }
+);
 export const metadata = {
   title: "Positions | Kaido Protocol",
   description: "Positions page",

@@ -86,7 +86,7 @@ export default function PositionPage() {
   //     setActions(act);
   //   })();
   // }, []);
-  if (address == null || balance == null) return <div></div>;
+  if (balance == null) return <div></div>;
 
   if (
     totalDeposited == null ||

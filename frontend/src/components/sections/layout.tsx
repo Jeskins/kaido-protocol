@@ -7,7 +7,6 @@ import { MainNav } from "./navbar";
 
 import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";
-import axios from "axios";
 import { BackgroundBeams } from "../ui/custom-ui/background-beams";
 
 import DefaultLanding from "./default-landing";
@@ -21,12 +20,6 @@ interface Convo {
   id: string;
   isAI: boolean;
   message: string;
-}
-
-interface ClassifyResponse {
-  response: string;
-  action: string;
-  params: string;
 }
 
 interface LayoutProps {

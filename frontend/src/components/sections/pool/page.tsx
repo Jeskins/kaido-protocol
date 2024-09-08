@@ -69,7 +69,7 @@ export default function PoolPage() {
   }, [fromToken, toToken, aiTriggered]);
 
   useEffect(() => {
-    if (address == null || balance == null) return;
+    if (balance == null) return;
     if (selectedAction) {
       if (sellingPrice == "0") setSellingPrice(fromCoversionValue);
       const f = fromAmount == "" ? "0" : fromAmount;
@@ -126,7 +126,7 @@ export default function PoolPage() {
       setAiTriggered(!aiTriggered);
     }
   }, [actionParams]);
-  if (address == null || balance == null) return <div></div>;
+  if (balance == null) return <div></div>;
 
   return (
     <div className="flex justify-center items-center h-full">

@@ -1,11 +1,6 @@
-import StakePage from "@/components/sections/stake/page";
+"use client";
 
-export const metadata = {
-  title: "Stake | Kaido Protocol",
-  description: "Swaps page",
-};
-
-export default function Page() {
+export default function StakePage() {
   return (
     <div className="flex justify-center items-center h-full">
       <p className="font-semibold text-sm select-none">Coming Soon</p>

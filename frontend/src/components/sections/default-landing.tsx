@@ -3,9 +3,7 @@ import { HeroHighlight, Highlight } from "../ui/custom-ui/hero-highlight";
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { useEnvironmentContext } from "./context";
-import { useState } from "react";
 import "@/styles/spinner.css";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { kintoLogin } from "@/lib/helpers/kinto";
 export default function DefaultLanding() {
   const { kintoSDK } = useEnvironmentContext();

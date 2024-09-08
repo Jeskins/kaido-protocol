@@ -13,7 +13,6 @@ import { createPublicClient, http, PublicClient, WalletClient } from "viem";
 import { kinto } from "@/lib/config";
 import getAllbalance from "@/lib/helpers/getAllBalances";
 import { fetchAccountInfo, fetchKYCViewerInfo } from "@/lib/helpers/kinto";
-import { initXmtpWithKeys } from "@/lib/helpers/xmtp";
 
 interface BalanceContextType {
   kintoSDK: KintoSDK;
