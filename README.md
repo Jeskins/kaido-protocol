@@ -20,11 +20,33 @@ The AI agent, built with Galadriel, is integrated into our platform using XMTP c
 
 ### Galdriel
 
-Implemented OpenAI's GPT-4 for LLM conversations and added web search tools for Real-Time Market Analysis offering the users with Investment plans and Current Market Sentiments based on their portfolio thereby providing a personalized investment & learning experience.
+AI Agent Contract deployment
+
+`https://explorer.galadriel.com/address/0x94f9BbBA5081Bc9232493f1aa0D74Ca56e942571`
+
+AI Agent Contract code
+
+`https://github.com/Jeskins/kaido-protocol/blob/main/LLM/contracts/contracts/OpenAiSimpleLlm.sol`
 
 ### Kinto
 
+Uniswap V3 Fork contracts code deployed on Kinto
+
+`https://github.com/Jeskins/kaido-protocol/tree/main/hardhat/contracts`
+
+Kinto deployments
+
+`https://github.com/Jeskins/kaido-protocol/blob/main/hardhat/networks.js#L58`
+
+Frontend contract call integration
+
+`https://github.com/Jeskins/kaido-protocol/blob/main/frontend/src/components/sections/pool/transaction.tsx#L307`
+
 ### XMTP
+
+AI Agent Chat bot built using MessageKit
+
+`https://github.com/Jeskins/kaido-protocol/blob/main/XMTPfinale/index.ts`
 
 ## Getting Started
 1. Clone the Repository:
